@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "pages": [
+    {
+      "slug": "vorgang-erfassen",
+      "component": "VorgangErfassen",
+      "title": "Vorgang erfassen",
+      "endpoints": [
+        {
+          "entity": "vorgaenge",
+          "op": "create",
+          "fields": [
+            "titel",
+            "beschreibung",
+            "bereich",
+            "verantwortlich_vorname",
+            "verantwortlich_nachname",
+            "startdatum",
+            "enddatum",
+            "werkzeuge"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "flows": [
+    {
+      "path": "/intents/vorgang-anlegen",
+      "label": "Vorgang anlegen",
+      "description": "Neuen Vorgang mit Verantwortlichen, Zeitraum und eingesetzten Werkzeugen erfassen und direkt erste Anforderungen dazu festhalten.",
+      "file": "src/pages/intents/VorgangAnlegenPage.tsx",
+      "summary": "/**\n * Vorgang anlegen — 3-Schritt-Wizard mit Prüfen.\n * Steps: 1) Titel, Bereich und Verantwortliche → 2) Status, Zeitraum und Werkzeuge → 3) Optional erste Anforderung → Prüfen & anlegen.\n * Reads: — (nur über den Flow-Hook). Writes: vorgaenge, anforderungen_und_randbedingungen (nur wenn ausgefüllt).\n * Composes: IntentWizardShell, Bound, Field, ChoiceGroup, StepNav, SummaryStep, SuccessStep.\n */",
+      "components": [
+        "Bound",
+        "IntentWizardShell",
+        "StepNav",
+        "SuccessStep",
+        "SummaryStep",
+        "WizardStep"
+      ],
+      "writes": []
+    },
+    {
+      "path": "/intents/entscheidung-dokumentieren",
+      "label": "Entscheidung dokumentieren",
+      "description": "Eine Entscheidung mit Begründung, Alternativen und Lösungsweg zu einem Vorgang und ggf. einer Anforderung festhalten.",
+      "file": "src/pages/intents/EntscheidungDokumentierenPage.tsx",
+      "summary": "/**\n * Entscheidung dokumentieren — 3-Schritt-Wizard.\n * Steps: 1) Vorgang wählen → 2) Optional Anforderung oder Randbedingung wählen → 3) Entscheidung erfassen → Prüfen & anlegen.\n * Reads: vorgaenge, anforderungen_und_randbedingungen. Writes: entscheidungen_und_loesungswege (via useEntscheidungDokumentierenFlow).\n * Composes: IntentWizardShell, EntitySelectStep, Bound, StepNav, SummaryStep, SuccessStep.\n */",
+      "components": [
+        "Bound",
+        "EntitySelectStep",
+        "IntentWizardShell",
+        "StepNav",
+        "SuccessStep",
+        "SummaryStep",
+        "WizardStep"
+      ],
+      "writes": []
+    },
+    {
+      "path": "/intents/ergebnis-festhalten",
+      "label": "Ergebnis oder Grenze festhalten",
+      "description": "Ein beobachtetes Ergebnis oder eine erkannte Grenze zu einer Entscheidung erfassen, mit Verlässlichkeit.",
+      "file": "src/pages/intents/ErgebnisFesthaltenPage.tsx",
+      "summary": "/**\n * Ergebnis oder Grenze festhalten — 3-Schritt-Wizard.\n * Steps: 1) Vorgang und zugehörige Entscheidung wählen → 2) Art, Titel, Bewertung und Auswirkung erfassen\n *        → 3) Verlässlichkeit angeben → Prüfen & anlegen.\n * Reads: vorgaenge, entscheidungen_und_loesungswege. Writes: ergebnisse_und_grenzen (via useErgebnisFesthaltenFlow).\n * Composes: IntentWizardShell, EntitySelectStep, Bound, StepNav, SummaryStep, SuccessStep.\n */",
+      "components": [
+        "Bound",
+        "EntitySelectStep",
+        "IntentWizardShell",
+        "StepNav",
+        "SuccessStep",
+        "SummaryStep",
+        "WizardStep"
+      ],
+      "writes": []
+    },
+    {
+      "path": "/intents/annahme-pruefen",
+      "label": "Annahme prüfen",
+      "description": "Eine offene Annahme bestätigen oder widerlegen, mit Prüfergebnis und stützendem Ergebnis.",
+      "file": "src/pages/intents/AnnahmePruefenPage.tsx",
+      "summary": "/**\n * Annahme prüfen — 3-Schritt-Wizard.\n * Steps: 1) Offene Annahme wählen → 2) Optional stützendes Ergebnis wählen → 3) Prüfergebnis erfassen (bestätigen oder widerlegen) → Prüfen & speichern.\n * Reads: annahmen, ergebnisse_und_grenzen. Writes: annahmen (update; pruefdatum = heute).\n * Composes: IntentWizardShell, EntitySelectStep, Bound, StepNav, SummaryStep, SuccessStep.\n */",
+      "components": [
+        "Bound",
+        "EntitySelectStep",
+        "IntentWizardShell",
+        "StepNav",
+        "SuccessStep",
+        "SummaryStep",
+        "WizardStep"
+      ],
+      "writes": []
+    },
+    {
+      "path": "/intents/regel-ableiten",
+      "label": "Regel ableiten",
+      "description": "Aus einer Entscheidung, einem Ergebnis oder einer bestätigten Annahme eine Regel als Entwurf formulieren.",
+      "file": "src/pages/intents/RegelAbleitenPage.tsx",
+      "summary": "/**\n * Regel ableiten — 3-Schritt-Wizard.\n * Steps: 1) Herkunft wählen (Vorgang, Entscheidung, Ergebnis, Annahme) → 2) Titel, Regeltext, Geltungsbereich → 3) Verlässlichkeit, Prüftermin, KI-Hinweis → Prüfen & anlegen.\n * Reads: vorgaenge, entscheidungen_und_loesungswege, ergebnisse_und_grenzen, annahmen. Writes: regeln (als Entwurf, via useRegelAbleitenFlow).\n * Composes: IntentWizardShell, EntitySelectStep, Bound, StepNav, SummaryStep, SuccessStep.\n */",
+      "components": [
+        "Bound",
+        "EntitySelectStep",
+        "IntentWizardShell",
+        "StepNav",
+        "SuccessStep",
+        "SummaryStep",
+        "WizardStep"
+      ],
+      "writes": []
+    },
+    {
+      "path": "/intents/vorgang-abschliessen",
+      "label": "Vorgang abschließen und übergeben",
+      "description": "Einen Vorgang mit Enddatum und Übergabehinweisen abschließen, damit das Wissen bei Wechsel erhalten bleibt.",
+      "file": "src/pages/intents/VorgangAbschliessenPage.tsx",
+      "summary": "/**\n * Vorgang abschließen — 3-Schritt-Wizard.\n * Steps: 1) Laufenden Vorgang wählen → 2) Übergabehinweise erfassen → 3) Abschluss bestätigen.\n * Reads: vorgaenge. Writes: vorgaenge (update: status, enddatum, uebergabehinweise) via useVorgangAbschliessenFlow.\n * Composes: IntentWizardShell, EntitySelectStep, Bound, StepNav, SummaryStep, SuccessStep.\n */",
+      "components": [
+        "Bound",
+        "EntitySelectStep",
+        "IntentWizardShell",
+        "StepNav",
+        "SuccessStep",
+        "SummaryStep",
+        "WizardStep"
+      ],
+      "writes": []
+    }
+  ],
+  "unregistered_pages": []
+}
