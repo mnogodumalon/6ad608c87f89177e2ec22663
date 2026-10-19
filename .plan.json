@@ -1,0 +1,394 @@
+{
+  "version": 1,
+  "language": "de",
+  "understanding": {
+    "summary": "Die Anwendung ist das organisationale Gedächtnis: Zu jedem Vorgang (Projekt, Aufgabe) werden Anforderungen, Randbedingungen, Entscheidungen, Lösungswege, Ergebnisse, Grenzen, Annahmen und daraus abgeleitete Regeln festgehalten. Bei allem steht, wie verlässlich die Erkenntnis ist. So bleibt das Wissen erhalten, auch wenn Beschäftigte oder Werkzeuge wechseln, und die KI kann es nutzen und erweitern.",
+    "roles": [
+      "Verantwortliche für Vorgänge",
+      "Entscheider",
+      "Wissensverwalter",
+      "KI-Assistenz und Auswertung",
+      "Geschäftsführung"
+    ],
+    "main_tasks": [
+      "Vorgang anlegen und übergeben",
+      "Anforderungen und Randbedingungen erfassen",
+      "Entscheidungen und Lösungswege dokumentieren",
+      "Ergebnisse und Grenzen festhalten",
+      "Annahmen prüfen: bestätigen oder widerlegen",
+      "Regeln aus Erkenntnissen ableiten und regelmäßig überprüfen"
+    ],
+    "platform_roles": [
+      {
+        "persona": "Verantwortliche für Vorgänge",
+        "role": "datenverarbeitung",
+        "apps": [
+          "vorgaenge",
+          "anforderungen_und_randbedingungen",
+          "entscheidungen_und_loesungswege",
+          "ergebnisse_und_grenzen",
+          "annahmen"
+        ]
+      },
+      {
+        "persona": "Entscheider",
+        "role": "standard",
+        "apps": [
+          "entscheidungen_und_loesungswege",
+          "regeln",
+          "vorgaenge",
+          "anforderungen_und_randbedingungen",
+          "annahmen",
+          "ergebnisse_und_grenzen"
+        ]
+      },
+      {
+        "persona": "Wissensverwalter",
+        "role": "administrator",
+        "apps": [
+          "vorgaenge",
+          "anforderungen_und_randbedingungen",
+          "entscheidungen_und_loesungswege",
+          "ergebnisse_und_grenzen",
+          "annahmen",
+          "regeln"
+        ]
+      },
+      {
+        "persona": "Geschäftsführung",
+        "role": "minimal",
+        "apps": [
+          "vorgaenge",
+          "regeln",
+          "annahmen",
+          "ergebnisse_und_grenzen",
+          "entscheidungen_und_loesungswege",
+          "anforderungen_und_randbedingungen"
+        ]
+      }
+    ]
+  },
+  "flows": [
+    {
+      "slug": "vorgang-anlegen",
+      "label": {
+        "de": "Vorgang anlegen",
+        "en": "Create case"
+      },
+      "description": "Neuen Vorgang mit Verantwortlichen, Zeitraum und eingesetzten Werkzeugen erfassen und direkt erste Anforderungen dazu festhalten.",
+      "priority": "must",
+      "writes": [
+        {
+          "entity": "vorgaenge",
+          "op": "create",
+          "when": "always",
+          "fields": {
+            "titel": "user",
+            "beschreibung": "user",
+            "bereich": "user",
+            "verantwortlich_vorname": "user",
+            "verantwortlich_nachname": "user",
+            "status": "fixed:geplant",
+            "startdatum": "user",
+            "werkzeuge": "user"
+          },
+          "needs": {}
+        },
+        {
+          "entity": "anforderungen_und_randbedingungen",
+          "op": "create",
+          "when": "optional",
+          "fields": {
+            "vorgang": "picked",
+            "art": "user",
+            "titel": "user",
+            "beschreibung": "user",
+            "quelle": "user",
+            "prioritaet": "user",
+            "verlaesslichkeit": "user",
+            "erfassungsdatum": "derived:today"
+          },
+          "needs": {}
+        }
+      ],
+      "required": [],
+      "brief": "# Flow `vorgang-anlegen` — Vorgang anlegen\nNeuen Vorgang mit Verantwortlichen, Zeitraum und eingesetzten Werkzeugen erfassen und direkt erste Anforderungen dazu festhalten.\n\n## Your hook — import it, never rebuild what it owns\n`import { useVorgangAnlegenFlow } from '@/lib/journey/flows/VorgangAnlegen';` — generated from the Schreibliste below. It OWNS the form(s), one record search per picked field (columns and filter from the plan) and the submit plan with every fixed and derived value. You compose: `flow.forms.<entity>` for <Bound>/<Field>, `{...flow.picks.<field>.select} {...flow.pick('<field>')}` (or `flow.pickMany` for a multi pick) for <EntitySelectStep>, `flow.validateStep(n)` in StepNav.onNext, `flow.submit` + `flow.formList` for SummaryStep/SuccessStep, `flow.reset()`; what the hook does not own reads through its door `flow.port` — availability `useOccupancy(flow.port, '<entity>', { resource })`, a count `useRecordCount(flow.port, …)` — never import servicePort next to the hook. Options: `steps` (field → step), `items` (how a hit reads, per pick: vorgang), `initial`, `messages`. The hook's docblock in .lane-context.md shows the exact call. Never import servicePort, useStepForm, useJourneySubmit, useRecordSearch or useDashboardData in this page — check-intents refuses a page that uses the hook and any of them.\n\n## Steps (in this order)\n1. Titel, Bereich und Verantwortliche angeben\n2. Status, Zeitraum und Werkzeuge festlegen\n3. Optional erste Anforderung oder Randbedingung erfassen\n\n## Schreibliste — the ONLY writes this flow makes (the gate compares your plan steps with this list)\n- creates `vorgaenge`:\n    - `titel`: the user enters it (bind it through the layer: form.field/…)\n    - `beschreibung`: the user enters it (bind it through the layer: form.field/…)\n    - `bereich`: the user enters it (bind it through the layer: form.field/…)\n    - `verantwortlich_vorname`: the user enters it (bind it through the layer: form.field/…)\n    - `verantwortlich_nachname`: the user enters it (bind it through the layer: form.field/…)\n    - `status`: fixed value `geplant` — set it in the plan step's values, never ask\n    - `startdatum`: the user enters it (bind it through the layer: form.field/…)\n    - `werkzeuge`: the user enters it (bind it through the layer: form.field/…)\n- creates `anforderungen_und_randbedingungen` (only when the flow needs it):\n    - `vorgang`: from the record the user picks in this flow\n    - `art`: the user enters it (bind it through the layer: form.field/…)\n    - `titel`: the user enters it (bind it through the layer: form.field/…)\n    - `beschreibung`: the user enters it (bind it through the layer: form.field/…)\n    - `quelle`: the user enters it (bind it through the layer: form.field/…)\n    - `prioritaet`: the user enters it (bind it through the layer: form.field/…)\n    - `verlaesslichkeit`: the user enters it (bind it through the layer: form.field/…)\n    - `erfassungsdatum`: derived: today() — set it in the plan step, never ask\n\n## Success page\n- shows: `vorgaenge.titel`, `vorgaenge.status`\n- next flows to offer: `entscheidung-dokumentieren`\n\n## Never write these — another flow or a tool owns them\n- `entscheidungen_und_loesungswege.vorgang` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.anforderung` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.titel` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.entscheidungsdatum` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.entscheider_vorname` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.entscheider_nachname` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.begruendung` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.alternativen` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.loesungsweg` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.werkzeug` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.gueltigkeit` (owner: intent `entscheidung-dokumentieren`)\n- `ergebnisse_und_grenzen.vorgang` (owner: intent `ergebnis-festhalten`)\n- `ergebnisse_und_grenzen.entscheidung` (owner: intent `ergebnis-festhalten`)\n- `ergebnisse_und_grenzen.art` (owner: intent `ergebnis-festhalten`)\n- `ergebnisse_und_grenzen.titel` (owner: intent `ergebnis-festhalten`)\n- `ergebnisse_und_grenzen.beschreibung` (owner: intent `ergebnis-festhalten`)\n- `ergebnisse_und_grenzen.beobachtungsdatum` (owner: intent `ergebnis-festhalten`)\n- `ergebnisse_und_grenzen.bewertung` (owner: intent `ergebnis-festhalten`)\n- `ergebnisse_und_grenzen.verlaesslichkeit` (owner: intent `ergebnis-festhalten`)\n- `ergebnisse_und_grenzen.auswirkung` (owner: intent `ergebnis-festhalten`)\n- `annahmen.pruefstatus` (owner: intent `annahme-pruefen`)\n- `annahmen.pruefdatum` (owner: intent `annahme-pruefen`)\n- `annahmen.pruefergebnis` (owner: intent `annahme-pruefen`)\n- `annahmen.stuetzendes_ergebnis` (owner: intent `annahme-pruefen`)\n- `annahmen.verlaesslichkeit` (owner: intent `annahme-pruefen`)\n- `regeln.titel` (owner: intent `regel-ableiten`)\n- `regeln.regeltext` (owner: intent `regel-ableiten`)\n- `regeln.geltungsbereich` (owner: intent `regel-ableiten`)\n- `regeln.vorgang` (owner: intent `regel-ableiten`)\n- `regeln.entscheidung` (owner: intent `regel-ableiten`)\n- `regeln.ergebnis` (owner: intent `regel-ableiten`)\n- `regeln.annahme` (owner: intent `regel-ableiten`)\n- `regeln.verlaesslichkeitsgrad` (owner: intent `regel-ableiten`)\n- `regeln.status` (owner: intent `regel-ableiten`)\n- `regeln.naechste_pruefung` (owner: intent `regel-ableiten`)\n- `regeln.ki_hinweis` (owner: intent `regel-ableiten`)\n- `vorgaenge.enddatum` (owner: intent `vorgang-abschliessen`)\n- `vorgaenge.uebergabehinweise` (owner: intent `vorgang-abschliessen`)\n- `regeln.gueltig_ab` (owner: tool `regel-gueltig-ab-setzen`)\n"
+    },
+    {
+      "slug": "entscheidung-dokumentieren",
+      "label": {
+        "de": "Entscheidung dokumentieren",
+        "en": "Document decision"
+      },
+      "description": "Eine Entscheidung mit Begründung, Alternativen und Lösungsweg zu einem Vorgang und ggf. einer Anforderung festhalten.",
+      "priority": "must",
+      "writes": [
+        {
+          "entity": "entscheidungen_und_loesungswege",
+          "op": "create",
+          "when": "always",
+          "fields": {
+            "vorgang": "picked",
+            "anforderung": "picked",
+            "titel": "user",
+            "entscheidungsdatum": "derived:today",
+            "entscheider_vorname": "user",
+            "entscheider_nachname": "user",
+            "begruendung": "user",
+            "alternativen": "user",
+            "loesungsweg": "user",
+            "werkzeug": "user",
+            "gueltigkeit": "fixed:gueltig"
+          },
+          "needs": {}
+        }
+      ],
+      "required": [],
+      "brief": "# Flow `entscheidung-dokumentieren` — Entscheidung dokumentieren\nEine Entscheidung mit Begründung, Alternativen und Lösungsweg zu einem Vorgang und ggf. einer Anforderung festhalten.\n\n## Your hook — import it, never rebuild what it owns\n`import { useEntscheidungDokumentierenFlow } from '@/lib/journey/flows/EntscheidungDokumentieren';` — generated from the Schreibliste below. It OWNS the form(s), one record search per picked field (columns and filter from the plan) and the submit plan with every fixed and derived value. You compose: `flow.forms.<entity>` for <Bound>/<Field>, `{...flow.picks.<field>.select} {...flow.pick('<field>')}` (or `flow.pickMany` for a multi pick) for <EntitySelectStep>, `flow.validateStep(n)` in StepNav.onNext, `flow.submit` + `flow.formList` for SummaryStep/SuccessStep, `flow.reset()`; what the hook does not own reads through its door `flow.port` — availability `useOccupancy(flow.port, '<entity>', { resource })`, a count `useRecordCount(flow.port, …)` — never import servicePort next to the hook. Options: `steps` (field → step), `items` (how a hit reads, per pick: vorgang, anforderung), `initial`, `messages`. The hook's docblock in .lane-context.md shows the exact call. Never import servicePort, useStepForm, useJourneySubmit, useRecordSearch or useDashboardData in this page — check-intents refuses a page that uses the hook and any of them.\n\n## Steps (in this order)\n1. Vorgang wählen\n2. Optional Anforderung oder Randbedingung wählen\n3. Entscheidung, Begründung, Alternativen und Lösungsweg erfassen\n\n## Schreibliste — the ONLY writes this flow makes (the gate compares your plan steps with this list)\n- creates `entscheidungen_und_loesungswege`:\n    - `vorgang`: from the record the user picks in this flow\n    - `anforderung`: from the record the user picks in this flow\n    - `titel`: the user enters it (bind it through the layer: form.field/…)\n    - `entscheidungsdatum`: derived: today() — set it in the plan step, never ask\n    - `entscheider_vorname`: the user enters it (bind it through the layer: form.field/…)\n    - `entscheider_nachname`: the user enters it (bind it through the layer: form.field/…)\n    - `begruendung`: the user enters it (bind it through the layer: form.field/…)\n    - `alternativen`: the user enters it (bind it through the layer: form.field/…)\n    - `loesungsweg`: the user enters it (bind it through the layer: form.field/…)\n    - `werkzeug`: the user enters it (bind it through the layer: form.field/…)\n    - `gueltigkeit`: fixed value `gueltig` — set it in the plan step's values, never ask\n\n## Reads\n- `vorgaenge` columns titel, status, bereich\n- `anforderungen_und_randbedingungen` columns titel, art, verlaesslichkeit, vorgang\n\n## Success page\n- shows: `entscheidungen_und_loesungswege.titel`, `entscheidungen_und_loesungswege.gueltigkeit`\n- next flows to offer: `ergebnis-festhalten`\n\n## Never write these — another flow or a tool owns them\n- `vorgaenge.titel` (owner: intent `vorgang-anlegen`)\n- `vorgaenge.beschreibung` (owner: intent `vorgang-anlegen`)\n- `vorgaenge.bereich` (owner: intent `vorgang-anlegen`)\n- `vorgaenge.verantwortlich_vorname` (owner: intent `vorgang-anlegen`)\n- `vorgaenge.verantwortlich_nachname` (owner: intent `vorgang-anlegen`)\n- `vorgaenge.status` (owner: intent `vorgang-anlegen`)\n- `vorgaenge.startdatum` (owner: intent `vorgang-anlegen`)\n- `vorgaenge.werkzeuge` (owner: intent `vorgang-anlegen`)\n- `anforderungen_und_randbedingungen.vorgang` (owner: intent `vorgang-anlegen`)\n- `anforderungen_und_randbedingungen.art` (owner: intent `vorgang-anlegen`)\n- `anforderungen_und_randbedingungen.titel` (owner: intent `vorgang-anlegen`)\n- `anforderungen_und_randbedingungen.beschreibung` (owner: intent `vorgang-anlegen`)\n- `anforderungen_und_randbedingungen.quelle` (owner: intent `vorgang-anlegen`)\n- `anforderungen_und_randbedingungen.prioritaet` (owner: intent `vorgang-anlegen`)\n- `anforderungen_und_randbedingungen.verlaesslichkeit` (owner: intent `vorgang-anlegen`)\n- `anforderungen_und_randbedingungen.erfassungsdatum` (owner: intent `vorgang-anlegen`)\n- `ergebnisse_und_grenzen.vorgang` (owner: intent `ergebnis-festhalten`)\n- `ergebnisse_und_grenzen.entscheidung` (owner: intent `ergebnis-festhalten`)\n- `ergebnisse_und_grenzen.art` (owner: intent `ergebnis-festhalten`)\n- `ergebnisse_und_grenzen.titel` (owner: intent `ergebnis-festhalten`)\n- `ergebnisse_und_grenzen.beschreibung` (owner: intent `ergebnis-festhalten`)\n- `ergebnisse_und_grenzen.beobachtungsdatum` (owner: intent `ergebnis-festhalten`)\n- `ergebnisse_und_grenzen.bewertung` (owner: intent `ergebnis-festhalten`)\n- `ergebnisse_und_grenzen.verlaesslichkeit` (owner: intent `ergebnis-festhalten`)\n- `ergebnisse_und_grenzen.auswirkung` (owner: intent `ergebnis-festhalten`)\n- `annahmen.pruefstatus` (owner: intent `annahme-pruefen`)\n- `annahmen.pruefdatum` (owner: intent `annahme-pruefen`)\n- `annahmen.pruefergebnis` (owner: intent `annahme-pruefen`)\n- `annahmen.stuetzendes_ergebnis` (owner: intent `annahme-pruefen`)\n- `annahmen.verlaesslichkeit` (owner: intent `annahme-pruefen`)\n- `regeln.titel` (owner: intent `regel-ableiten`)\n- `regeln.regeltext` (owner: intent `regel-ableiten`)\n- `regeln.geltungsbereich` (owner: intent `regel-ableiten`)\n- `regeln.vorgang` (owner: intent `regel-ableiten`)\n- `regeln.entscheidung` (owner: intent `regel-ableiten`)\n- `regeln.ergebnis` (owner: intent `regel-ableiten`)\n- `regeln.annahme` (owner: intent `regel-ableiten`)\n- `regeln.verlaesslichkeitsgrad` (owner: intent `regel-ableiten`)\n- `regeln.status` (owner: intent `regel-ableiten`)\n- `regeln.naechste_pruefung` (owner: intent `regel-ableiten`)\n- `regeln.ki_hinweis` (owner: intent `regel-ableiten`)\n- `vorgaenge.enddatum` (owner: intent `vorgang-abschliessen`)\n- `vorgaenge.uebergabehinweise` (owner: intent `vorgang-abschliessen`)\n- `regeln.gueltig_ab` (owner: tool `regel-gueltig-ab-setzen`)\n"
+    },
+    {
+      "slug": "ergebnis-festhalten",
+      "label": {
+        "de": "Ergebnis oder Grenze festhalten",
+        "en": "Record result or limit"
+      },
+      "description": "Ein beobachtetes Ergebnis oder eine erkannte Grenze zu einer Entscheidung erfassen, mit Verlässlichkeit.",
+      "priority": "must",
+      "writes": [
+        {
+          "entity": "ergebnisse_und_grenzen",
+          "op": "create",
+          "when": "always",
+          "fields": {
+            "vorgang": "picked",
+            "entscheidung": "picked",
+            "art": "user",
+            "titel": "user",
+            "beschreibung": "user",
+            "beobachtungsdatum": "derived:today",
+            "bewertung": "user",
+            "verlaesslichkeit": "user",
+            "auswirkung": "user"
+          },
+          "needs": {}
+        }
+      ],
+      "required": [],
+      "brief": "# Flow `ergebnis-festhalten` — Ergebnis oder Grenze festhalten\nEin beobachtetes Ergebnis oder eine erkannte Grenze zu einer Entscheidung erfassen, mit Verlässlichkeit.\n\n## Your hook — import it, never rebuild what it owns\n`import { useErgebnisFesthaltenFlow } from '@/lib/journey/flows/ErgebnisFesthalten';` — generated from the Schreibliste below. It OWNS the form(s), one record search per picked field (columns and filter from the plan) and the submit plan with every fixed and derived value. You compose: `flow.forms.<entity>` for <Bound>/<Field>, `{...flow.picks.<field>.select} {...flow.pick('<field>')}` (or `flow.pickMany` for a multi pick) for <EntitySelectStep>, `flow.validateStep(n)` in StepNav.onNext, `flow.submit` + `flow.formList` for SummaryStep/SuccessStep, `flow.reset()`; what the hook does not own reads through its door `flow.port` — availability `useOccupancy(flow.port, '<entity>', { resource })`, a count `useRecordCount(flow.port, …)` — never import servicePort next to the hook. Options: `steps` (field → step), `items` (how a hit reads, per pick: vorgang, entscheidung), `initial`, `messages`. The hook's docblock in .lane-context.md shows the exact call. Never import servicePort, useStepForm, useJourneySubmit, useRecordSearch or useDashboardData in this page — check-intents refuses a page that uses the hook and any of them.\n\n## Steps (in this order)\n1. Vorgang und zugehörige Entscheidung wählen\n2. Art, Titel, Bewertung und Auswirkung erfassen\n3. Verlässlichkeit angeben\n\n## Schreibliste — the ONLY writes this flow makes (the gate compares your plan steps with this list)\n- creates `ergebnisse_und_grenzen`:\n    - `vorgang`: from the record the user picks in this flow\n    - `entscheidung`: from the record the user picks in this flow\n    - `art`: the user enters it (bind it through the layer: form.field/…)\n    - `titel`: the user enters it (bind it through the layer: form.field/…)\n    - `beschreibung`: the user enters it (bind it through the layer: form.field/…)\n    - `beobachtungsdatum`: derived: today() — set it in the plan step, never ask\n    - `bewertung`: the user enters it (bind it through the layer: form.field/…)\n    - `verlaesslichkeit`: the user enters it (bind it through the layer: form.field/…)\n    - `auswirkung`: the user enters it (bind it through the layer: form.field/…)\n\n## Reads\n- `entscheidungen_und_loesungswege` columns titel, vorgang, gueltigkeit\n\n## Success page\n- shows: `ergebnisse_und_grenzen.titel`, `ergebnisse_und_grenzen.verlaesslichkeit`\n- next flows to offer: `annahme-pruefen`, `regel-ableiten`\n\n## Never write these — another flow or a tool owns them\n- `vorgaenge.titel` (owner: intent `vorgang-anlegen`)\n- `vorgaenge.beschreibung` (owner: intent `vorgang-anlegen`)\n- `vorgaenge.bereich` (owner: intent `vorgang-anlegen`)\n- `vorgaenge.verantwortlich_vorname` (owner: intent `vorgang-anlegen`)\n- `vorgaenge.verantwortlich_nachname` (owner: intent `vorgang-anlegen`)\n- `vorgaenge.status` (owner: intent `vorgang-anlegen`)\n- `vorgaenge.startdatum` (owner: intent `vorgang-anlegen`)\n- `vorgaenge.werkzeuge` (owner: intent `vorgang-anlegen`)\n- `anforderungen_und_randbedingungen.vorgang` (owner: intent `vorgang-anlegen`)\n- `anforderungen_und_randbedingungen.art` (owner: intent `vorgang-anlegen`)\n- `anforderungen_und_randbedingungen.titel` (owner: intent `vorgang-anlegen`)\n- `anforderungen_und_randbedingungen.beschreibung` (owner: intent `vorgang-anlegen`)\n- `anforderungen_und_randbedingungen.quelle` (owner: intent `vorgang-anlegen`)\n- `anforderungen_und_randbedingungen.prioritaet` (owner: intent `vorgang-anlegen`)\n- `anforderungen_und_randbedingungen.verlaesslichkeit` (owner: intent `vorgang-anlegen`)\n- `anforderungen_und_randbedingungen.erfassungsdatum` (owner: intent `vorgang-anlegen`)\n- `entscheidungen_und_loesungswege.vorgang` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.anforderung` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.titel` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.entscheidungsdatum` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.entscheider_vorname` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.entscheider_nachname` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.begruendung` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.alternativen` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.loesungsweg` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.werkzeug` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.gueltigkeit` (owner: intent `entscheidung-dokumentieren`)\n- `annahmen.pruefstatus` (owner: intent `annahme-pruefen`)\n- `annahmen.pruefdatum` (owner: intent `annahme-pruefen`)\n- `annahmen.pruefergebnis` (owner: intent `annahme-pruefen`)\n- `annahmen.stuetzendes_ergebnis` (owner: intent `annahme-pruefen`)\n- `annahmen.verlaesslichkeit` (owner: intent `annahme-pruefen`)\n- `regeln.titel` (owner: intent `regel-ableiten`)\n- `regeln.regeltext` (owner: intent `regel-ableiten`)\n- `regeln.geltungsbereich` (owner: intent `regel-ableiten`)\n- `regeln.vorgang` (owner: intent `regel-ableiten`)\n- `regeln.entscheidung` (owner: intent `regel-ableiten`)\n- `regeln.ergebnis` (owner: intent `regel-ableiten`)\n- `regeln.annahme` (owner: intent `regel-ableiten`)\n- `regeln.verlaesslichkeitsgrad` (owner: intent `regel-ableiten`)\n- `regeln.status` (owner: intent `regel-ableiten`)\n- `regeln.naechste_pruefung` (owner: intent `regel-ableiten`)\n- `regeln.ki_hinweis` (owner: intent `regel-ableiten`)\n- `vorgaenge.enddatum` (owner: intent `vorgang-abschliessen`)\n- `vorgaenge.uebergabehinweise` (owner: intent `vorgang-abschliessen`)\n- `regeln.gueltig_ab` (owner: tool `regel-gueltig-ab-setzen`)\n"
+    },
+    {
+      "slug": "annahme-pruefen",
+      "label": {
+        "de": "Annahme prüfen",
+        "en": "Review assumption"
+      },
+      "description": "Eine offene Annahme bestätigen oder widerlegen, mit Prüfergebnis und stützendem Ergebnis.",
+      "priority": "must",
+      "writes": [
+        {
+          "entity": "annahmen",
+          "op": "update",
+          "when": "always",
+          "fields": {
+            "pruefstatus": "user",
+            "pruefdatum": "derived:today",
+            "pruefergebnis": "user",
+            "stuetzendes_ergebnis": "picked",
+            "verlaesslichkeit": "user"
+          },
+          "needs": {}
+        }
+      ],
+      "required": [],
+      "brief": "# Flow `annahme-pruefen` — Annahme prüfen\nEine offene Annahme bestätigen oder widerlegen, mit Prüfergebnis und stützendem Ergebnis.\n\n## Your hook — import it, never rebuild what it owns\n`import { useAnnahmePruefenFlow } from '@/lib/journey/flows/AnnahmePruefen';` — generated from the Schreibliste below. It OWNS the form(s), one record search per picked field (columns and filter from the plan) and the submit plan with every fixed and derived value. You compose: `flow.forms.<entity>` for <Bound>/<Field>, `{...flow.picks.<field>.select} {...flow.pick('<field>')}` (or `flow.pickMany` for a multi pick) for <EntitySelectStep>, `flow.validateStep(n)` in StepNav.onNext, `flow.submit` + `flow.formList` for SummaryStep/SuccessStep, `flow.reset()`; what the hook does not own reads through its door `flow.port` — availability `useOccupancy(flow.port, '<entity>', { resource })`, a count `useRecordCount(flow.port, …)` — never import servicePort next to the hook. Options: `steps` (field → step), `items` (how a hit reads, per pick: stuetzendes_ergebnis), `initial`, `messages`. The hook's docblock in .lane-context.md shows the exact call. This flow CHANGES a record of `annahmen`: `{...flow.picks.annahmen.select} {...flow.pick('annahmen')}` picks it, the hook prefills the form with its current values and updates THAT record — never a create step, never a list from useDashboardData. Never import servicePort, useStepForm, useJourneySubmit, useRecordSearch or useDashboardData in this page — check-intents refuses a page that uses the hook and any of them.\n\n## Steps (in this order)\n1. Offene Annahme wählen\n2. Optional stützendes Ergebnis wählen\n3. Prüfergebnis erfassen und bestätigen oder widerlegen\n\n## Schreibliste — the ONLY writes this flow makes (the gate compares your plan steps with this list)\n- updates `annahmen`:\n    - `pruefstatus`: the user enters it (bind it through the layer: form.field/…)\n    - `pruefdatum`: derived: today() — set it in the plan step, never ask\n    - `pruefergebnis`: the user enters it (bind it through the layer: form.field/…)\n    - `stuetzendes_ergebnis`: from the record the user picks in this flow\n    - `verlaesslichkeit`: the user enters it (bind it through the layer: form.field/…)\n\n## Reads\n- `annahmen` columns aussage, vorgang, verlaesslichkeit, pruefstatus\n- `ergebnisse_und_grenzen` columns titel, art, vorgang, verlaesslichkeit\n\n## Success page\n- shows: `annahmen.pruefstatus`, `annahmen.pruefdatum`\n- next flows to offer: `regel-ableiten`\n\n## Never write these — another flow or a tool owns them\n- `vorgaenge.titel` (owner: intent `vorgang-anlegen`)\n- `vorgaenge.beschreibung` (owner: intent `vorgang-anlegen`)\n- `vorgaenge.bereich` (owner: intent `vorgang-anlegen`)\n- `vorgaenge.verantwortlich_vorname` (owner: intent `vorgang-anlegen`)\n- `vorgaenge.verantwortlich_nachname` (owner: intent `vorgang-anlegen`)\n- `vorgaenge.status` (owner: intent `vorgang-anlegen`)\n- `vorgaenge.startdatum` (owner: intent `vorgang-anlegen`)\n- `vorgaenge.werkzeuge` (owner: intent `vorgang-anlegen`)\n- `anforderungen_und_randbedingungen.vorgang` (owner: intent `vorgang-anlegen`)\n- `anforderungen_und_randbedingungen.art` (owner: intent `vorgang-anlegen`)\n- `anforderungen_und_randbedingungen.titel` (owner: intent `vorgang-anlegen`)\n- `anforderungen_und_randbedingungen.beschreibung` (owner: intent `vorgang-anlegen`)\n- `anforderungen_und_randbedingungen.quelle` (owner: intent `vorgang-anlegen`)\n- `anforderungen_und_randbedingungen.prioritaet` (owner: intent `vorgang-anlegen`)\n- `anforderungen_und_randbedingungen.verlaesslichkeit` (owner: intent `vorgang-anlegen`)\n- `anforderungen_und_randbedingungen.erfassungsdatum` (owner: intent `vorgang-anlegen`)\n- `entscheidungen_und_loesungswege.vorgang` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.anforderung` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.titel` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.entscheidungsdatum` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.entscheider_vorname` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.entscheider_nachname` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.begruendung` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.alternativen` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.loesungsweg` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.werkzeug` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.gueltigkeit` (owner: intent `entscheidung-dokumentieren`)\n- `ergebnisse_und_grenzen.vorgang` (owner: intent `ergebnis-festhalten`)\n- `ergebnisse_und_grenzen.entscheidung` (owner: intent `ergebnis-festhalten`)\n- `ergebnisse_und_grenzen.art` (owner: intent `ergebnis-festhalten`)\n- `ergebnisse_und_grenzen.titel` (owner: intent `ergebnis-festhalten`)\n- `ergebnisse_und_grenzen.beschreibung` (owner: intent `ergebnis-festhalten`)\n- `ergebnisse_und_grenzen.beobachtungsdatum` (owner: intent `ergebnis-festhalten`)\n- `ergebnisse_und_grenzen.bewertung` (owner: intent `ergebnis-festhalten`)\n- `ergebnisse_und_grenzen.verlaesslichkeit` (owner: intent `ergebnis-festhalten`)\n- `ergebnisse_und_grenzen.auswirkung` (owner: intent `ergebnis-festhalten`)\n- `regeln.titel` (owner: intent `regel-ableiten`)\n- `regeln.regeltext` (owner: intent `regel-ableiten`)\n- `regeln.geltungsbereich` (owner: intent `regel-ableiten`)\n- `regeln.vorgang` (owner: intent `regel-ableiten`)\n- `regeln.entscheidung` (owner: intent `regel-ableiten`)\n- `regeln.ergebnis` (owner: intent `regel-ableiten`)\n- `regeln.annahme` (owner: intent `regel-ableiten`)\n- `regeln.verlaesslichkeitsgrad` (owner: intent `regel-ableiten`)\n- `regeln.status` (owner: intent `regel-ableiten`)\n- `regeln.naechste_pruefung` (owner: intent `regel-ableiten`)\n- `regeln.ki_hinweis` (owner: intent `regel-ableiten`)\n- `vorgaenge.enddatum` (owner: intent `vorgang-abschliessen`)\n- `vorgaenge.uebergabehinweise` (owner: intent `vorgang-abschliessen`)\n- `regeln.gueltig_ab` (owner: tool `regel-gueltig-ab-setzen`)\n"
+    },
+    {
+      "slug": "regel-ableiten",
+      "label": {
+        "de": "Regel ableiten",
+        "en": "Derive rule"
+      },
+      "description": "Aus einer Entscheidung, einem Ergebnis oder einer bestätigten Annahme eine Regel als Entwurf formulieren.",
+      "priority": "must",
+      "writes": [
+        {
+          "entity": "regeln",
+          "op": "create",
+          "when": "always",
+          "fields": {
+            "titel": "user",
+            "regeltext": "user",
+            "geltungsbereich": "user",
+            "vorgang": "picked",
+            "entscheidung": "picked",
+            "ergebnis": "picked",
+            "annahme": "picked",
+            "verlaesslichkeitsgrad": "user",
+            "status": "fixed:entwurf",
+            "naechste_pruefung": "user",
+            "ki_hinweis": "user"
+          },
+          "needs": {}
+        }
+      ],
+      "required": [],
+      "brief": "# Flow `regel-ableiten` — Regel ableiten\nAus einer Entscheidung, einem Ergebnis oder einer bestätigten Annahme eine Regel als Entwurf formulieren.\n\n## Your hook — import it, never rebuild what it owns\n`import { useRegelAbleitenFlow } from '@/lib/journey/flows/RegelAbleiten';` — generated from the Schreibliste below. It OWNS the form(s), one record search per picked field (columns and filter from the plan) and the submit plan with every fixed and derived value. You compose: `flow.forms.<entity>` for <Bound>/<Field>, `{...flow.picks.<field>.select} {...flow.pick('<field>')}` (or `flow.pickMany` for a multi pick) for <EntitySelectStep>, `flow.validateStep(n)` in StepNav.onNext, `flow.submit` + `flow.formList` for SummaryStep/SuccessStep, `flow.reset()`; what the hook does not own reads through its door `flow.port` — availability `useOccupancy(flow.port, '<entity>', { resource })`, a count `useRecordCount(flow.port, …)` — never import servicePort next to the hook. Options: `steps` (field → step), `items` (how a hit reads, per pick: vorgang, entscheidung, ergebnis, annahme), `initial`, `messages`. The hook's docblock in .lane-context.md shows the exact call. Never import servicePort, useStepForm, useJourneySubmit, useRecordSearch or useDashboardData in this page — check-intents refuses a page that uses the hook and any of them.\n\n## Steps (in this order)\n1. Herkunft wählen: Vorgang, Entscheidung, Ergebnis oder Annahme\n2. Titel, Regeltext und Geltungsbereich erfassen\n3. Verlässlichkeitsgrad, Prüftermin und KI-Hinweis angeben\n\n## Schreibliste — the ONLY writes this flow makes (the gate compares your plan steps with this list)\n- creates `regeln`:\n    - `titel`: the user enters it (bind it through the layer: form.field/…)\n    - `regeltext`: the user enters it (bind it through the layer: form.field/…)\n    - `geltungsbereich`: the user enters it (bind it through the layer: form.field/…)\n    - `vorgang`: from the record the user picks in this flow\n    - `entscheidung`: from the record the user picks in this flow\n    - `ergebnis`: from the record the user picks in this flow\n    - `annahme`: from the record the user picks in this flow\n    - `verlaesslichkeitsgrad`: the user enters it (bind it through the layer: form.field/…)\n    - `status`: fixed value `entwurf` — set it in the plan step's values, never ask\n    - `naechste_pruefung`: the user enters it (bind it through the layer: form.field/…)\n    - `ki_hinweis`: the user enters it (bind it through the layer: form.field/…)\n\n## Reads\n- `annahmen` columns aussage, pruefstatus, vorgang\n- `ergebnisse_und_grenzen` columns titel, art, verlaesslichkeit\n- `entscheidungen_und_loesungswege` columns titel, gueltigkeit\n\n## Success page\n- shows: `regeln.titel`, `regeln.status`\n\n## Never write these — another flow or a tool owns them\n- `vorgaenge.titel` (owner: intent `vorgang-anlegen`)\n- `vorgaenge.beschreibung` (owner: intent `vorgang-anlegen`)\n- `vorgaenge.bereich` (owner: intent `vorgang-anlegen`)\n- `vorgaenge.verantwortlich_vorname` (owner: intent `vorgang-anlegen`)\n- `vorgaenge.verantwortlich_nachname` (owner: intent `vorgang-anlegen`)\n- `vorgaenge.status` (owner: intent `vorgang-anlegen`)\n- `vorgaenge.startdatum` (owner: intent `vorgang-anlegen`)\n- `vorgaenge.werkzeuge` (owner: intent `vorgang-anlegen`)\n- `anforderungen_und_randbedingungen.vorgang` (owner: intent `vorgang-anlegen`)\n- `anforderungen_und_randbedingungen.art` (owner: intent `vorgang-anlegen`)\n- `anforderungen_und_randbedingungen.titel` (owner: intent `vorgang-anlegen`)\n- `anforderungen_und_randbedingungen.beschreibung` (owner: intent `vorgang-anlegen`)\n- `anforderungen_und_randbedingungen.quelle` (owner: intent `vorgang-anlegen`)\n- `anforderungen_und_randbedingungen.prioritaet` (owner: intent `vorgang-anlegen`)\n- `anforderungen_und_randbedingungen.verlaesslichkeit` (owner: intent `vorgang-anlegen`)\n- `anforderungen_und_randbedingungen.erfassungsdatum` (owner: intent `vorgang-anlegen`)\n- `entscheidungen_und_loesungswege.vorgang` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.anforderung` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.titel` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.entscheidungsdatum` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.entscheider_vorname` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.entscheider_nachname` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.begruendung` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.alternativen` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.loesungsweg` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.werkzeug` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.gueltigkeit` (owner: intent `entscheidung-dokumentieren`)\n- `ergebnisse_und_grenzen.vorgang` (owner: intent `ergebnis-festhalten`)\n- `ergebnisse_und_grenzen.entscheidung` (owner: intent `ergebnis-festhalten`)\n- `ergebnisse_und_grenzen.art` (owner: intent `ergebnis-festhalten`)\n- `ergebnisse_und_grenzen.titel` (owner: intent `ergebnis-festhalten`)\n- `ergebnisse_und_grenzen.beschreibung` (owner: intent `ergebnis-festhalten`)\n- `ergebnisse_und_grenzen.beobachtungsdatum` (owner: intent `ergebnis-festhalten`)\n- `ergebnisse_und_grenzen.bewertung` (owner: intent `ergebnis-festhalten`)\n- `ergebnisse_und_grenzen.verlaesslichkeit` (owner: intent `ergebnis-festhalten`)\n- `ergebnisse_und_grenzen.auswirkung` (owner: intent `ergebnis-festhalten`)\n- `annahmen.pruefstatus` (owner: intent `annahme-pruefen`)\n- `annahmen.pruefdatum` (owner: intent `annahme-pruefen`)\n- `annahmen.pruefergebnis` (owner: intent `annahme-pruefen`)\n- `annahmen.stuetzendes_ergebnis` (owner: intent `annahme-pruefen`)\n- `annahmen.verlaesslichkeit` (owner: intent `annahme-pruefen`)\n- `vorgaenge.enddatum` (owner: intent `vorgang-abschliessen`)\n- `vorgaenge.uebergabehinweise` (owner: intent `vorgang-abschliessen`)\n- `regeln.gueltig_ab` (owner: tool `regel-gueltig-ab-setzen`)\n"
+    },
+    {
+      "slug": "vorgang-abschliessen",
+      "label": {
+        "de": "Vorgang abschließen und übergeben",
+        "en": "Close and hand over case"
+      },
+      "description": "Einen Vorgang mit Enddatum und Übergabehinweisen abschließen, damit das Wissen bei Wechsel erhalten bleibt.",
+      "priority": "must",
+      "writes": [
+        {
+          "entity": "vorgaenge",
+          "op": "update",
+          "when": "always",
+          "fields": {
+            "status": "fixed:abgeschlossen",
+            "enddatum": "derived:today",
+            "uebergabehinweise": "user"
+          },
+          "needs": {}
+        }
+      ],
+      "required": [],
+      "brief": "# Flow `vorgang-abschliessen` — Vorgang abschließen und übergeben\nEinen Vorgang mit Enddatum und Übergabehinweisen abschließen, damit das Wissen bei Wechsel erhalten bleibt.\n\n## Your hook — import it, never rebuild what it owns\n`import { useVorgangAbschliessenFlow } from '@/lib/journey/flows/VorgangAbschliessen';` — generated from the Schreibliste below. It OWNS the form(s), one record search per picked field (columns and filter from the plan) and the submit plan with every fixed and derived value. You compose: `flow.forms.<entity>` for <Bound>/<Field>, `{...flow.picks.<field>.select} {...flow.pick('<field>')}` (or `flow.pickMany` for a multi pick) for <EntitySelectStep>, `flow.validateStep(n)` in StepNav.onNext, `flow.submit` + `flow.formList` for SummaryStep/SuccessStep, `flow.reset()`; what the hook does not own reads through its door `flow.port` — availability `useOccupancy(flow.port, '<entity>', { resource })`, a count `useRecordCount(flow.port, …)` — never import servicePort next to the hook. Options: `steps` (field → step), `items` (how a hit reads, per pick), `initial`, `messages`. The hook's docblock in .lane-context.md shows the exact call. This flow CHANGES a record of `vorgaenge`: `{...flow.picks.vorgaenge.select} {...flow.pick('vorgaenge')}` picks it, the hook prefills the form with its current values and updates THAT record — never a create step, never a list from useDashboardData. Never import servicePort, useStepForm, useJourneySubmit, useRecordSearch or useDashboardData in this page — check-intents refuses a page that uses the hook and any of them.\n\n## Steps (in this order)\n1. Laufenden Vorgang wählen\n2. Übergabehinweise erfassen\n3. Abschluss bestätigen\n\n## Schreibliste — the ONLY writes this flow makes (the gate compares your plan steps with this list)\n- updates `vorgaenge`:\n    - `status`: fixed value `abgeschlossen` — set it in the plan step's values, never ask\n    - `enddatum`: derived: today() — set it in the plan step, never ask\n    - `uebergabehinweise`: the user enters it (bind it through the layer: form.field/…)\n\n## Reads\n- `vorgaenge` columns titel, bereich, verantwortlich_nachname, status\n\n## Success page\n- shows: `vorgaenge.status`, `vorgaenge.uebergabehinweise`\n\n## Never write these — another flow or a tool owns them\n- `vorgaenge.titel` (owner: intent `vorgang-anlegen`)\n- `vorgaenge.beschreibung` (owner: intent `vorgang-anlegen`)\n- `vorgaenge.bereich` (owner: intent `vorgang-anlegen`)\n- `vorgaenge.verantwortlich_vorname` (owner: intent `vorgang-anlegen`)\n- `vorgaenge.verantwortlich_nachname` (owner: intent `vorgang-anlegen`)\n- `vorgaenge.startdatum` (owner: intent `vorgang-anlegen`)\n- `vorgaenge.werkzeuge` (owner: intent `vorgang-anlegen`)\n- `anforderungen_und_randbedingungen.vorgang` (owner: intent `vorgang-anlegen`)\n- `anforderungen_und_randbedingungen.art` (owner: intent `vorgang-anlegen`)\n- `anforderungen_und_randbedingungen.titel` (owner: intent `vorgang-anlegen`)\n- `anforderungen_und_randbedingungen.beschreibung` (owner: intent `vorgang-anlegen`)\n- `anforderungen_und_randbedingungen.quelle` (owner: intent `vorgang-anlegen`)\n- `anforderungen_und_randbedingungen.prioritaet` (owner: intent `vorgang-anlegen`)\n- `anforderungen_und_randbedingungen.verlaesslichkeit` (owner: intent `vorgang-anlegen`)\n- `anforderungen_und_randbedingungen.erfassungsdatum` (owner: intent `vorgang-anlegen`)\n- `entscheidungen_und_loesungswege.vorgang` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.anforderung` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.titel` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.entscheidungsdatum` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.entscheider_vorname` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.entscheider_nachname` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.begruendung` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.alternativen` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.loesungsweg` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.werkzeug` (owner: intent `entscheidung-dokumentieren`)\n- `entscheidungen_und_loesungswege.gueltigkeit` (owner: intent `entscheidung-dokumentieren`)\n- `ergebnisse_und_grenzen.vorgang` (owner: intent `ergebnis-festhalten`)\n- `ergebnisse_und_grenzen.entscheidung` (owner: intent `ergebnis-festhalten`)\n- `ergebnisse_und_grenzen.art` (owner: intent `ergebnis-festhalten`)\n- `ergebnisse_und_grenzen.titel` (owner: intent `ergebnis-festhalten`)\n- `ergebnisse_und_grenzen.beschreibung` (owner: intent `ergebnis-festhalten`)\n- `ergebnisse_und_grenzen.beobachtungsdatum` (owner: intent `ergebnis-festhalten`)\n- `ergebnisse_und_grenzen.bewertung` (owner: intent `ergebnis-festhalten`)\n- `ergebnisse_und_grenzen.verlaesslichkeit` (owner: intent `ergebnis-festhalten`)\n- `ergebnisse_und_grenzen.auswirkung` (owner: intent `ergebnis-festhalten`)\n- `annahmen.pruefstatus` (owner: intent `annahme-pruefen`)\n- `annahmen.pruefdatum` (owner: intent `annahme-pruefen`)\n- `annahmen.pruefergebnis` (owner: intent `annahme-pruefen`)\n- `annahmen.stuetzendes_ergebnis` (owner: intent `annahme-pruefen`)\n- `annahmen.verlaesslichkeit` (owner: intent `annahme-pruefen`)\n- `regeln.titel` (owner: intent `regel-ableiten`)\n- `regeln.regeltext` (owner: intent `regel-ableiten`)\n- `regeln.geltungsbereich` (owner: intent `regel-ableiten`)\n- `regeln.vorgang` (owner: intent `regel-ableiten`)\n- `regeln.entscheidung` (owner: intent `regel-ableiten`)\n- `regeln.ergebnis` (owner: intent `regel-ableiten`)\n- `regeln.annahme` (owner: intent `regel-ableiten`)\n- `regeln.verlaesslichkeitsgrad` (owner: intent `regel-ableiten`)\n- `regeln.status` (owner: intent `regel-ableiten`)\n- `regeln.naechste_pruefung` (owner: intent `regel-ableiten`)\n- `regeln.ki_hinweis` (owner: intent `regel-ableiten`)\n- `regeln.gueltig_ab` (owner: tool `regel-gueltig-ab-setzen`)\n"
+    }
+  ],
+  "public_pages": [],
+  "tools": [
+    {
+      "id": "regel-pruefung-erinnern",
+      "purpose": "Täglich Regeln mit Status gültig suchen, deren Überprüfungstermin erreicht oder vorbei ist, und dem Team eine Sammelmail an den Schlüsselinhaber senden. Keine Schreibzugriffe auf Datensätze."
+    },
+    {
+      "id": "offene-annahmen-erinnern",
+      "purpose": "Wöchentlich offene Annahmen sammeln, die seit über 30 Tagen nicht geprüft wurden, und eine Sammelmail an den Schlüsselinhaber senden. Keine Schreibzugriffe."
+    },
+    {
+      "id": "regel-bei-widerlegter-annahme-aussetzen",
+      "purpose": "Bei jeder Änderung einer Annahme prüfen, ob der Prüfstatus widerlegt ist; dann alle Regeln, die aus dieser Annahme abgeleitet sind und gültig sind, auf ausgesetzt setzen."
+    },
+    {
+      "id": "regel-gueltig-ab-setzen",
+      "purpose": "Wenn eine Regel bearbeitet wird und ihr Status gültig ist, aber Gültig ab leer ist, wird das heutige Datum eingetragen. Das Feld wird nur dann geschrieben."
+    }
+  ],
+  "covered_by_platform": [
+    {
+      "wish": "Erkenntnisse erfassen, ändern und löschen",
+      "feature": "record_form"
+    },
+    {
+      "wish": "Wissen durchsuchen und filtern",
+      "feature": "search_filter"
+    },
+    {
+      "wish": "Übersicht nach Verlässlichkeit, Status oder Vorgang",
+      "feature": "distribution_view"
+    },
+    {
+      "wish": "Nachvollziehen, wer was geändert hat",
+      "feature": "record_history"
+    },
+    {
+      "wish": "Dokumente und Notizen an Vorgänge anhängen",
+      "feature": "record_attachments"
+    },
+    {
+      "wish": "Gedächtnis als Tabelle für die KI exportieren",
+      "feature": "csv_json_export"
+    },
+    {
+      "wish": "Zugriff je Person steuern",
+      "feature": "user_roles"
+    }
+  ],
+  "ownership": {
+    "vorgaenge": {
+      "titel": "intent:vorgang-anlegen",
+      "beschreibung": "intent:vorgang-anlegen",
+      "bereich": "intent:vorgang-anlegen",
+      "verantwortlich_vorname": "intent:vorgang-anlegen",
+      "verantwortlich_nachname": "intent:vorgang-anlegen",
+      "status": "intent:vorgang-abschliessen",
+      "startdatum": "intent:vorgang-anlegen",
+      "werkzeuge": "intent:vorgang-anlegen",
+      "enddatum": "intent:vorgang-abschliessen",
+      "uebergabehinweise": "intent:vorgang-abschliessen"
+    },
+    "anforderungen_und_randbedingungen": {
+      "vorgang": "intent:vorgang-anlegen",
+      "art": "intent:vorgang-anlegen",
+      "titel": "intent:vorgang-anlegen",
+      "beschreibung": "intent:vorgang-anlegen",
+      "quelle": "intent:vorgang-anlegen",
+      "prioritaet": "intent:vorgang-anlegen",
+      "verlaesslichkeit": "intent:vorgang-anlegen",
+      "erfassungsdatum": "intent:vorgang-anlegen"
+    },
+    "entscheidungen_und_loesungswege": {
+      "vorgang": "intent:entscheidung-dokumentieren",
+      "anforderung": "intent:entscheidung-dokumentieren",
+      "titel": "intent:entscheidung-dokumentieren",
+      "entscheidungsdatum": "intent:entscheidung-dokumentieren",
+      "entscheider_vorname": "intent:entscheidung-dokumentieren",
+      "entscheider_nachname": "intent:entscheidung-dokumentieren",
+      "begruendung": "intent:entscheidung-dokumentieren",
+      "alternativen": "intent:entscheidung-dokumentieren",
+      "loesungsweg": "intent:entscheidung-dokumentieren",
+      "werkzeug": "intent:entscheidung-dokumentieren",
+      "gueltigkeit": "intent:entscheidung-dokumentieren"
+    },
+    "ergebnisse_und_grenzen": {
+      "vorgang": "intent:ergebnis-festhalten",
+      "entscheidung": "intent:ergebnis-festhalten",
+      "art": "intent:ergebnis-festhalten",
+      "titel": "intent:ergebnis-festhalten",
+      "beschreibung": "intent:ergebnis-festhalten",
+      "beobachtungsdatum": "intent:ergebnis-festhalten",
+      "bewertung": "intent:ergebnis-festhalten",
+      "verlaesslichkeit": "intent:ergebnis-festhalten",
+      "auswirkung": "intent:ergebnis-festhalten"
+    },
+    "annahmen": {
+      "pruefstatus": "intent:annahme-pruefen",
+      "pruefdatum": "intent:annahme-pruefen",
+      "pruefergebnis": "intent:annahme-pruefen",
+      "stuetzendes_ergebnis": "intent:annahme-pruefen",
+      "verlaesslichkeit": "intent:annahme-pruefen"
+    },
+    "regeln": {
+      "titel": "intent:regel-ableiten",
+      "regeltext": "intent:regel-ableiten",
+      "geltungsbereich": "intent:regel-ableiten",
+      "vorgang": "intent:regel-ableiten",
+      "entscheidung": "intent:regel-ableiten",
+      "ergebnis": "intent:regel-ableiten",
+      "annahme": "intent:regel-ableiten",
+      "verlaesslichkeitsgrad": "intent:regel-ableiten",
+      "status": "tool:regel-bei-widerlegter-annahme-aussetzen",
+      "naechste_pruefung": "intent:regel-ableiten",
+      "ki_hinweis": "intent:regel-ableiten",
+      "gueltig_ab": "tool:regel-gueltig-ab-setzen"
+    }
+  },
+  "dashboard": {
+    "focus": [
+      "Offene Annahmen, die noch geprüft werden müssen",
+      "Regeln mit fälligem Überprüfungstermin",
+      "Laufende Vorgänge und ihre Verantwortlichen",
+      "Entscheidungen mit Gültigkeit und Verlässlichkeit der Erkenntnisse"
+    ],
+    "hints": [
+      "Verlässlichkeit (gesichert, wahrscheinlich, vermutet) farblich hervorheben",
+      "Abgeschlossene Vorgänge ohne Übergabehinweise markieren",
+      "Regeln mit Status Hypothese getrennt zeigen"
+    ],
+    "wishes": []
+  }
+}

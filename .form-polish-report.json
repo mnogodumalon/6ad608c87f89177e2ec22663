@@ -1,0 +1,57 @@
+{
+  "entities": {
+    "Vorgänge": {
+      "placeholders_set": 9,
+      "defaults_keys": [
+        "status",
+        "startdatum"
+      ],
+      "computed_keys": [
+        "_vorgang_dauer_tage"
+      ],
+      "reason": "Startdatum und Enddatum bilden ein Paar, daher wird die Dauer in Tagen als virtuelles Feld berechnet; es gibt keine Preisspalten."
+    },
+    "Anforderungen und Randbedingungen": {
+      "placeholders_set": 5,
+      "defaults_keys": [
+        "erfassungsdatum"
+      ],
+      "computed_keys": [],
+      "reason": "Keine Formeln, da das Formular nur Stammdaten und Texte ohne numerische Felder enthält; das Erfassungsdatum startet mit heute."
+    },
+    "Entscheidungen und Lösungswege": {
+      "placeholders_set": 10,
+      "defaults_keys": [
+        "entscheidungsdatum",
+        "gueltigkeit"
+      ],
+      "computed_keys": [],
+      "reason": "Keine Formeln, da das Formular nur Text- und Datumsfelder ohne numerische Berechnungskette enthält."
+    },
+    "Ergebnisse und Grenzen": {
+      "placeholders_set": 6,
+      "defaults_keys": [
+        "beobachtungsdatum"
+      ],
+      "computed_keys": [],
+      "reason": "Keine Formeln, da es nur Stammdaten und Texte ohne numerische Felder gibt; das Beobachtungsdatum startet mit heute."
+    },
+    "Annahmen": {
+      "placeholders_set": 6,
+      "defaults_keys": [
+        "pruefstatus"
+      ],
+      "computed_keys": [],
+      "reason": "Keine Formeln, da das Formular reine Stammdaten ohne numerische Felder oder Datumspaare enthält."
+    },
+    "Regeln": {
+      "placeholders_set": 10,
+      "defaults_keys": [
+        "status",
+        "gueltig_ab"
+      ],
+      "computed_keys": [],
+      "reason": "Keine Formeln, da die Regeln reine Stammdaten ohne numerische Felder sind."
+    }
+  }
+}

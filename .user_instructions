@@ -1,0 +1,16 @@
+Erstelle eine Anwendung für ein organisationales Gedächtnis.
+Es kann passieren, dass die Organisation zunehmend von einzelnen Werkzeugen und externen Modellen abhängig wird, während ihr eigenes Wissen über die Arbeit nicht entsprechend wächst.
+Das Problem verschärft sich, wenn Beschäftigte wechseln, Projekte abgeschlossen werden oder Systeme ausgetauscht werden.
+Ein belastbares organisationales Gedächtnis muss deshalb unabhängig von einzelnen KI-Interaktionen funktionieren.
+Es muss festhalten, was für die Organisation relevant ist, und zugleich unterscheiden, wie sicher diese Erkenntnisse sind.
+Dazu gehören:
+* die ursprünglichen Anforderungen,
+* die tatsächlichen Randbedingungen,
+* die getroffenen Entscheidungen,
+* die verwendeten Lösungswege,
+* die beobachteten Ergebnisse,
+* die erkannten Grenzen,
+* die daraus abgeleiteten Regeln,
+* die später bestätigten oder widerlegten Annahmen.
+Die KI kann dieses Gedächtnis dann nutzen, erweitern und bei der Auswertung unterstützen.
+Modelliere diese Fragestellung und erzeuge dann daraus die passenden Module.

@@ -1,0 +1,60 @@
+{
+  "VorgaengeDialog.tsx": {
+    "titel": "z. B. Einführung neues CRM",
+    "beschreibung": "Worum geht es im Vorgang?",
+    "bereich": "z. B. Vertrieb, IT",
+    "verantwortlich_vorname": "z. B. Anna",
+    "verantwortlich_nachname": "z. B. Müller",
+    "startdatum": "Wann startet der Vorgang?",
+    "enddatum": "Wann endet der Vorgang?",
+    "werkzeuge": "Ein Werkzeug pro Zeile",
+    "uebergabehinweise": "Was muss die Nachfolge wissen?"
+  },
+  "AnforderungenUndRandbedingungenDialog.tsx": {
+    "vorgang": "Welcher Vorgang?",
+    "titel": "z. B. Zugang für Rollstuhl",
+    "beschreibung": "Was genau wurde gefordert?",
+    "quelle": "z. B. Kundengespräch am 12.03.",
+    "erfassungsdatum": "Wann wurde es erfasst?"
+  },
+  "EntscheidungenUndLoesungswegeDialog.tsx": {
+    "vorgang": "Welcher Vorgang?",
+    "anforderung": "Welche Anforderung betrifft es?",
+    "titel": "z. B. Wechsel auf Cloud-Hosting",
+    "entscheidungsdatum": "Wann wurde entschieden?",
+    "entscheider_vorname": "z. B. Anna",
+    "entscheider_nachname": "z. B. Müller",
+    "begruendung": "Warum wurde so entschieden?",
+    "alternativen": "Eine Alternative pro Zeile",
+    "loesungsweg": "Wie wurde es gelöst?",
+    "werkzeug": "z. B. Excel, Entscheidungsmatrix"
+  },
+  "ErgebnisseUndGrenzenDialog.tsx": {
+    "vorgang": "Welcher Vorgang?",
+    "entscheidung": "Welche Entscheidung?",
+    "titel": "z. B. Lieferzeit halbiert",
+    "beschreibung": "Was wurde beobachtet?",
+    "beobachtungsdatum": "Wann wurde es beobachtet?",
+    "auswirkung": "Welche Folgen hatte es?"
+  },
+  "AnnahmenDialog.tsx": {
+    "vorgang": "Welcher Vorgang?",
+    "aussage": "Was wird angenommen?",
+    "begruendung": "Warum gilt diese Annahme?",
+    "pruefdatum": "Wann wird sie geprüft?",
+    "pruefergebnis": "Was hat die Prüfung ergeben?",
+    "stuetzendes_ergebnis": "Welches Ergebnis stützt sie?"
+  },
+  "RegelnDialog.tsx": {
+    "titel": "z. B. Freigabe ab 5.000 Euro",
+    "regeltext": "Was genau gilt?",
+    "geltungsbereich": "z. B. Einkauf, Vertrieb",
+    "vorgang": "Welcher Vorgang?",
+    "entscheidung": "Welche Entscheidung?",
+    "ergebnis": "Welches Ergebnis?",
+    "annahme": "Welche Annahme?",
+    "gueltig_ab": "Ab wann gilt die Regel?",
+    "naechste_pruefung": "Wann wird geprüft?",
+    "ki_hinweis": "Was soll die KI beachten?"
+  }
+}
