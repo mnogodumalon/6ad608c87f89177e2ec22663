@@ -17,7 +17,7 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import type { Annahmen, Vorgaenge, ErgebnisseUndGrenzen, LookupValue } from '@/types/app';
 import { APP_IDS, LOOKUP_OPTIONS } from '@/types/app';
-import { extractRecordId, createRecordUrl, cleanFieldsForApi, getUserProfile, LivingAppsService } from '@/services/livingAppsService';
+import { extractRecordId, createRecordUrl, cleanFieldsForApi, uploadFile, getUserProfile, LivingAppsService } from '@/services/livingAppsService';
 import {
   Dialog, DialogContent, DialogHeader,
   DialogTitle, DialogFooter,
@@ -38,7 +38,7 @@ import { ErgebnisseUndGrenzenDialog } from '@/components/dialogs/ErgebnisseUndGr
 import { DatePicker } from '@/components/DatePicker';
 import { Checkbox } from '@/components/ui/checkbox';
 import { IconAlertCircle, IconCamera, IconChevronDown, IconCircleCheck, IconClipboard, IconFileText, IconLoader2, IconPhotoPlus, IconSparkles, IconUpload, IconX } from '@tabler/icons-react';
-import { fileToDataUri, extractFromInput, extractPhotoMeta, reverseGeocode } from '@/lib/ai';
+import { fileToDataUri, extractFromInput, extractPhotoMeta, reverseGeocode, dataUriToBlob } from '@/lib/ai';
 import { lookupKey } from '@/lib/formatters';
 
 /** Widened prefill type for AnnahmenDialog.defaultValues — see file header. */
@@ -331,6 +331,16 @@ export function AnnahmenDialog({ open, onClose, onSubmit, defaultValues, recordI
         }
         return merged as Partial<Annahmen['fields']>;
       });
+      // Upload scanned file to file fields
+      if (file && (file.type.startsWith('image/') || file.type === 'application/pdf')) {
+        try {
+          const blob = dataUriToBlob(uri!);
+          const fileUrl = await uploadFile(blob, file.name);
+          setFields(prev => ({ ...prev, upload: fileUrl }));
+        } catch (uploadErr) {
+          console.error('File upload failed:', uploadErr);
+        }
+      }
       setAiText('');
       setScanSuccess(true);
       setTimeout(() => setScanSuccess(false), 3000);
@@ -380,7 +390,7 @@ export function AnnahmenDialog({ open, onClose, onSubmit, defaultValues, recordI
         <Label htmlFor="vorgang">{fieldLabel('annahmen', 'vorgang')} <span className="text-destructive" aria-hidden="true">*</span></Label>
         <Combobox
           id="vorgang"
-          placeholder="Welcher Vorgang?"
+          placeholder=""
           items={vorgaengeListAll.map(r => ({
             id: r.record_id,
             label: String(r.fields.titel ?? r.record_id),
@@ -400,7 +410,7 @@ export function AnnahmenDialog({ open, onClose, onSubmit, defaultValues, recordI
         <Label htmlFor="aussage">{fieldLabel('annahmen', 'aussage')} <span className="text-destructive" aria-hidden="true">*</span></Label>
         <Textarea
           id="aussage"
-          placeholder="Was wird angenommen?"
+          placeholder=""
           value={fields.aussage ?? ''}
           onChange={e => setFields(f => ({ ...f, aussage: e.target.value }))}
           rows={3}
@@ -415,7 +425,7 @@ export function AnnahmenDialog({ open, onClose, onSubmit, defaultValues, recordI
         <Label htmlFor="begruendung">{fieldLabel('annahmen', 'begruendung')}</Label>
         <Textarea
           id="begruendung"
-          placeholder="Warum gilt diese Annahme?"
+          placeholder=""
           value={fields.begruendung ?? ''}
           onChange={e => setFields(f => ({ ...f, begruendung: e.target.value }))}
           rows={3}
@@ -525,7 +535,7 @@ export function AnnahmenDialog({ open, onClose, onSubmit, defaultValues, recordI
         <Label htmlFor="pruefdatum">{fieldLabel('annahmen', 'pruefdatum')}</Label>
         <DatePicker
           id="pruefdatum"
-          placeholder="Wann wird sie geprüft?"
+          placeholder=""
           mode="date"
           value={fields.pruefdatum ?? null}
           onChange={v => setFields(f => ({ ...f, pruefdatum: v ?? undefined }))}
@@ -537,7 +547,7 @@ export function AnnahmenDialog({ open, onClose, onSubmit, defaultValues, recordI
         <Label htmlFor="pruefergebnis">{fieldLabel('annahmen', 'pruefergebnis')}</Label>
         <Textarea
           id="pruefergebnis"
-          placeholder="Was hat die Prüfung ergeben?"
+          placeholder=""
           value={fields.pruefergebnis ?? ''}
           onChange={e => setFields(f => ({ ...f, pruefergebnis: e.target.value }))}
           rows={3}
@@ -549,7 +559,7 @@ export function AnnahmenDialog({ open, onClose, onSubmit, defaultValues, recordI
         <Label htmlFor="stuetzendes_ergebnis">{fieldLabel('annahmen', 'stuetzendes_ergebnis')}</Label>
         <Combobox
           id="stuetzendes_ergebnis"
-          placeholder="Welches Ergebnis stützt sie?"
+          placeholder=""
           items={ergebnisseUndGrenzenListAll.map(r => ({
             id: r.record_id,
             label: String(r.fields.titel ?? r.record_id),
@@ -559,6 +569,76 @@ export function AnnahmenDialog({ open, onClose, onSubmit, defaultValues, recordI
           onCreateNew={(q) => openCreateErgebnisseUndGrenzen("stuetzendes_ergebnis", q)}
           createLabel={t('create_in', { entity: appLabel('ergebnisse_und_grenzen') })}
         />
+      </div>
+    ),
+    'upload': (
+      <div key="upload" className="space-y-1.5">
+        <Label htmlFor="upload">{fieldLabel('annahmen', 'upload')}</Label>
+        {fields.upload ? (
+          <div className="flex items-center gap-3 rounded-lg border p-2">
+            <div className="relative h-14 w-14 shrink-0 rounded-md bg-muted overflow-hidden">
+              <div className="absolute inset-0 flex items-center justify-center">
+                <IconFileText size={20} className="text-muted-foreground" />
+              </div>
+              <img
+                src={fields.upload}
+                alt=""
+                className="relative h-full w-full object-cover"
+                onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }}
+              />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm truncate text-foreground">{fields.upload.split("/").pop()}</p>
+              <div className="flex gap-2 mt-1">
+                <label
+                  className="text-xs text-primary hover:underline cursor-pointer"
+                >
+                  {t('fr_change')}
+                  <input
+                    type="file"
+                    accept="image/*,.pdf"
+                    className="hidden"
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      try {
+                        const fileUrl = await uploadFile(file, file.name);
+                        setFields(f => ({ ...f, upload: fileUrl }));
+                      } catch (err) { console.error('Upload failed:', err); }
+                    }}
+                  />
+                </label>
+                <button
+                  type="button"
+                  className="text-xs text-muted-foreground hover:text-destructive"
+                  onClick={() => setFields(f => ({ ...f, upload: undefined }))}
+                >
+                  {t('fr_remove')}
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <label
+            className="flex flex-col items-center justify-center gap-1.5 rounded-lg border-2 border-dashed border-muted-foreground/25 p-4 cursor-pointer hover:border-primary/50 hover:bg-muted/50 transition-colors"
+          >
+            <IconUpload size={20} className="text-muted-foreground" />
+            <span className="text-sm text-muted-foreground">{t('fr_upload_file')}</span>
+            <input
+              type="file"
+              accept="image/*,.pdf"
+              className="hidden"
+              onChange={async (e) => {
+                const file = e.target.files?.[0];
+                if (!file) return;
+                try {
+                  const fileUrl = await uploadFile(file, file.name);
+                  setFields(f => ({ ...f, upload: fileUrl }));
+                } catch (err) { console.error('Upload failed:', err); }
+              }}
+            />
+          </label>
+        )}
       </div>
     ),
   };
@@ -575,7 +655,7 @@ export function AnnahmenDialog({ open, onClose, onSubmit, defaultValues, recordI
   //     kein passendes Backend-Feld in orderedFields) erscheinen NICHT als
   //     Input, sondern unten als kompakte 'Berechnungen'-Übersicht oder als
   //     Inline-Hint unter dem letzten beitragenden Input.
-  const FIELD_LABELS: Record<string, string> = {"vorgang": "Vorgang", "aussage": "Aussage der Annahme", "begruendung": "Begründung", "verlaesslichkeit": "Verlässlichkeit", "pruefstatus": "Prüfstatus", "pruefdatum": "Prüfdatum", "pruefergebnis": "Prüfergebnis", "stuetzendes_ergebnis": "Stützendes Ergebnis"};
+  const FIELD_LABELS: Record<string, string> = {"vorgang": "Vorgang", "aussage": "Aussage der Annahme", "begruendung": "Begründung", "verlaesslichkeit": "Verlässlichkeit", "pruefstatus": "Prüfstatus", "pruefdatum": "Prüfdatum", "pruefergebnis": "Prüfergebnis", "stuetzendes_ergebnis": "Stützendes Ergebnis", "upload": "Upload"};
   const CURRENCY_KEYS = new Set<string>([]);
   // Applookup-Referenz-Labels: pro applookup-Feld in dieser Form (ownKey)
   // eine Map { lookupKey: label } für ALLE Felder des Target-Schemas. Wird

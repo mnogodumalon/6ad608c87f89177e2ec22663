@@ -1,7 +1,7 @@
 # Scaffold Context — Generated File Contents
 
 These files are pre-generated. Do NOT Read the pre-generated source files — their contracts and contents are in THIS file and in the key-file parts listed below.
-Key file contents (types/app.ts, livingAppsService.ts, App.tsx, Layout.tsx, hooks/libs) are in .scaffold_files_p1, .scaffold_files_p2 — Read each of them with ONE Read right after this file.
+Key file contents (types/app.ts, livingAppsService.ts, App.tsx, Layout.tsx, hooks/libs) are in .scaffold_files_p1, .scaffold_files_p2, .scaffold_files_p3 — Read each of them with ONE Read right after this file.
 EXCEPTION: DashboardOverview.tsx is NOT included here. You MUST Read it with the Read tool before Write.
 Your job: Analyze data (1-2 sentences), Read then Write DashboardOverview.tsx (once), build.
 Large custom UI blocks (a self-contained concept of ~60+ lines no widget covers) are NOT written inline: dictate the props interface in a brief, dispatch build_components (ONE call, all components), write the Overview against your own interface, and call await_components before any gate or build — see CLAUDE.md Step 1b.
@@ -14,7 +14,7 @@ index.css is pre-generated with the shared design system. Do NOT edit it.
 src/config/ai-features.ts is editable — set AI_PHOTO_SCAN['Entity'] = true to enable photo scan in dialogs.
 NEVER use Bash cat/echo/heredoc for file operations — always use Read/Write/Edit tools.
 
-Generated 168 scaffold files:
+Generated 160 scaffold files:
   - src/App.tsx
   - src/i18n/index.ts
   - src/i18n/common.ts
@@ -24,7 +24,6 @@ Generated 168 scaffold files:
   - src/types/la-widgets.d.ts
   - src/components/PageShell.tsx
   - src/components/ActionsSidebar.tsx
-  - src/pages/DashboardOverview.tsx
   - src/pages/DashboardReady.tsx
   - src/components/DashboardStates.tsx
   - src/components/ConfirmDialog.tsx
@@ -54,12 +53,6 @@ Generated 168 scaffold files:
   - src/components/DatePicker.tsx
   - .placeholder-tasks.json
   - src/config/form-enhancements/types.ts
-  - src/config/form-enhancements/Vorgaenge.ts
-  - src/config/form-enhancements/AnforderungenUndRandbedingungen.ts
-  - src/config/form-enhancements/EntscheidungenUndLoesungswege.ts
-  - src/config/form-enhancements/ErgebnisseUndGrenzen.ts
-  - src/config/form-enhancements/Annahmen.ts
-  - src/config/form-enhancements/Regeln.ts
   - scripts/parse-formulas.mjs
   - scripts/apply-placeholders.mjs
   - src/config/intents.ts
@@ -125,7 +118,6 @@ Generated 168 scaffold files:
   - src/lib/ai.ts
   - src/components/VersionCheck.tsx
   - src/components/AttachmentsSection.tsx
-  - src/config/ai-features.ts
   - src/lib/formatters.ts
   - src/lib/polish.ts
   - src/hooks/useDashboardData.ts
@@ -345,7 +337,7 @@ contracts; Read one only if the contract below is insufficient.
  *   anforderungen_und_randbedingungen: vorgang, art, titel, beschreibung, quelle, prioritaet, verlaesslichkeit, erfassungsdatum  ·  → vorgaenge · ← entscheidungen_und_loesungswege (list + contextual +)
  *   entscheidungen_und_loesungswege: vorgang, anforderung, titel, entscheidungsdatum, entscheider_vorname, entscheider_nachname, begruendung, alternativen, …  ·  → vorgaenge · → anforderungen_und_randbedingungen · ← ergebnisse_und_grenzen (list + contextual +) · ← regeln (list + contextual +)
  *   ergebnisse_und_grenzen: vorgang, entscheidung, art, titel, beschreibung, beobachtungsdatum, bewertung, verlaesslichkeit, …  ·  → vorgaenge · → entscheidungen_und_loesungswege · ← annahmen (list + contextual +) · ← regeln (list + contextual +)
- *   annahmen: vorgang, aussage, begruendung, verlaesslichkeit, pruefstatus, pruefdatum, pruefergebnis, stuetzendes_ergebnis  ·  → vorgaenge · → ergebnisse_und_grenzen · ← regeln (list + contextual +)
+ *   annahmen: vorgang, aussage, begruendung, verlaesslichkeit, pruefstatus, pruefdatum, pruefergebnis, stuetzendes_ergebnis, …  ·  → vorgaenge · → ergebnisse_und_grenzen · ← regeln (list + contextual +)
  *   regeln: titel, regeltext, geltungsbereich, vorgang, entscheidung, ergebnis, annahme, verlaesslichkeitsgrad, …  ·  → vorgaenge · → entscheidungen_und_loesungswege · → ergebnisse_und_grenzen · → annahmen
  */
 ```

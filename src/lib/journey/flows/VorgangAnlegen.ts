@@ -1,8 +1,8 @@
 /**
  * useVorgangAnlegenFlow — the plumbing of the flow « Vorgang anlegen », generated from the plan.
  *
- * Writes `vorgaenge`: asks `titel`, `beschreibung`, `bereich`, `verantwortlich_vorname`, `verantwortlich_nachname`, `startdatum`, `werkzeuge`; sets `status` itself.
-Writes `anforderungen_und_randbedingungen` (only when the person fills it): asks `art`, `titel`, `beschreibung`, `quelle`, `prioritaet`, `verlaesslichkeit`; sets `erfassungsdatum` itself; links `vorgang` ← the created `vorgaenge`.
+ * Writes `vorgaenge`: asks `titel`, `bereich`, `werkzeuge`, `startdatum`, `beschreibung`, `verantwortlich_vorname`, `verantwortlich_nachname`; sets `status` itself.
+Writes `anforderungen_und_randbedingungen` (only when the person fills it): asks `art`, `titel`, `quelle`, `prioritaet`, `beschreibung`, `verlaesslichkeit`; sets `erfassungsdatum` itself; links `vorgang` ← the created `vorgaenge`.
  * The hook OWNS: the form(s) with exactly these fields and the plan's required
  * ingredients, one record search per picked field (columns and filter from
  * the plan), and the submit plan with its fixed and derived values. A page
@@ -17,21 +17,21 @@ Writes `anforderungen_und_randbedingungen` (only when the person fills it): asks
  *   messages  the sentence for an empty required field, per field
  *
  *   const flow = useVorgangAnlegenFlow({
- *     steps: { titel: 1, beschreibung: 1, bereich: 1, verantwortlich_vorname: 1, verantwortlich_nachname: 1, startdatum: 1, werkzeuge: 1, art: 1, quelle: 1, prioritaet: 1, verlaesslichkeit: 1 },
+ *     steps: { titel: 1, bereich: 1, werkzeuge: 1, startdatum: 1, beschreibung: 1, verantwortlich_vorname: 1, verantwortlich_nachname: 1, art: 1, quelle: 1, prioritaet: 1, verlaesslichkeit: 1 },
  *   });
  *   <IntentWizardShell forms={flow.forms} draftKey={flow.draftKey} …>
  *     <Bound form={flow.forms.vorgaenge} name="titel" />
- *     <Bound form={flow.forms.vorgaenge} name="beschreibung" />
  *     <Bound form={flow.forms.vorgaenge} name="bereich" />
+ *     <Bound form={flow.forms.vorgaenge} name="werkzeuge" />
+ *     <Bound form={flow.forms.vorgaenge} name="startdatum" />
+ *     <Bound form={flow.forms.vorgaenge} name="beschreibung" />
  *     <Bound form={flow.forms.vorgaenge} name="verantwortlich_vorname" />
  *     <Bound form={flow.forms.vorgaenge} name="verantwortlich_nachname" />
- *     <Bound form={flow.forms.vorgaenge} name="startdatum" />
- *     <Bound form={flow.forms.vorgaenge} name="werkzeuge" />
  *     <Bound form={flow.forms.anforderungen_und_randbedingungen} name="art" />
  *     <Bound form={flow.forms.anforderungen_und_randbedingungen} name="titel" />
- *     <Bound form={flow.forms.anforderungen_und_randbedingungen} name="beschreibung" />
  *     <Bound form={flow.forms.anforderungen_und_randbedingungen} name="quelle" />
  *     <Bound form={flow.forms.anforderungen_und_randbedingungen} name="prioritaet" />
+ *     <Bound form={flow.forms.anforderungen_und_randbedingungen} name="beschreibung" />
  *     <Bound form={flow.forms.anforderungen_und_randbedingungen} name="verlaesslichkeit" />
  *     <StepNav onNext={() => flow.validateStep(n)} />
  *     {!flow.submit.done && <SummaryStep forms={flow.formList} submit={flow.submit} />}
@@ -89,16 +89,16 @@ function hasValues(form: StepForm): boolean {
 export function useVorgangAnlegenFlow(options: VorgangAnlegenFlowOptions = {}) {
   const steps = { ...DEFAULT_STEPS, ...(options.steps ?? {}) } as Record<string, number>;
   const vorgaenge = useStepForm('vorgaenge', {
-    fields: ["titel", "beschreibung", "bereich", "verantwortlich_vorname", "verantwortlich_nachname", "startdatum", "werkzeuge"],
-    steps: only(steps, ["titel", "beschreibung", "bereich", "verantwortlich_vorname", "verantwortlich_nachname", "startdatum", "werkzeuge"]) as Record<string, number>,
-    initial: only(options.initial as FormValues | undefined, ["titel", "beschreibung", "bereich", "verantwortlich_vorname", "verantwortlich_nachname", "startdatum", "werkzeuge"]),
-    messages: only(options.messages as Record<string, string> | undefined, ["titel", "beschreibung", "bereich", "verantwortlich_vorname", "verantwortlich_nachname", "startdatum", "werkzeuge"]),
+    fields: ["titel", "bereich", "werkzeuge", "startdatum", "beschreibung", "verantwortlich_vorname", "verantwortlich_nachname"],
+    steps: only(steps, ["titel", "bereich", "werkzeuge", "startdatum", "beschreibung", "verantwortlich_vorname", "verantwortlich_nachname"]) as Record<string, number>,
+    initial: only(options.initial as FormValues | undefined, ["titel", "bereich", "werkzeuge", "startdatum", "beschreibung", "verantwortlich_vorname", "verantwortlich_nachname"]),
+    messages: only(options.messages as Record<string, string> | undefined, ["titel", "bereich", "werkzeuge", "startdatum", "beschreibung", "verantwortlich_vorname", "verantwortlich_nachname"]),
   });
   const anforderungen_und_randbedingungen = useStepForm('anforderungen_und_randbedingungen', {
-    fields: ["art", "titel", "beschreibung", "quelle", "prioritaet", "verlaesslichkeit"],
-    steps: only(steps, ["art", "titel", "beschreibung", "quelle", "prioritaet", "verlaesslichkeit"]) as Record<string, number>,
-    initial: only(options.initial as FormValues | undefined, ["art", "titel", "beschreibung", "quelle", "prioritaet", "verlaesslichkeit"]),
-    messages: only(options.messages as Record<string, string> | undefined, ["art", "titel", "beschreibung", "quelle", "prioritaet", "verlaesslichkeit"]),
+    fields: ["art", "titel", "quelle", "prioritaet", "beschreibung", "verlaesslichkeit"],
+    steps: only(steps, ["art", "titel", "quelle", "prioritaet", "beschreibung", "verlaesslichkeit"]) as Record<string, number>,
+    initial: only(options.initial as FormValues | undefined, ["art", "titel", "quelle", "prioritaet", "beschreibung", "verlaesslichkeit"]),
+    messages: only(options.messages as Record<string, string> | undefined, ["art", "titel", "quelle", "prioritaet", "beschreibung", "verlaesslichkeit"]),
   });
   const forms: VorgangAnlegenForms = { vorgaenge, anforderungen_und_randbedingungen };
   const formList: StepForm[] = [vorgaenge, anforderungen_und_randbedingungen];

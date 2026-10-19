@@ -12,10 +12,10 @@
  * a plain date field pair is shown instead.
  *
  * Facts from the metadata — candidates, NOT decisions:
- *   - vorgaenge: date pairs startdatum+enddatum · lookups status[laufend|abgeschlossen|archiviert|geplant]
- *   - anforderungen_und_randbedingungen: applookups vorgang→vorgaenge · lookups art[anforderung|randbedingung], prioritaet[hoch|mittel|niedrig], verlaesslichkeit[gesichert|wahrscheinlich|vermutet]
- *   - entscheidungen_und_loesungswege: applookups vorgang→vorgaenge, anforderung→anforderungen_und_randbedingungen · lookups gueltigkeit[ueberholt|widerrufen|gueltig]
- *   - ergebnisse_und_grenzen: applookups vorgang→vorgaenge, entscheidung→entscheidungen_und_loesungswege · lookups art[ergebnis|grenze], bewertung[erfolgreich|teilweise|nicht_erfolgreich], verlaesslichkeit[gesichert|wahrscheinlich|vermutet]
+ *   - vorgaenge: date pairs startdatum+enddatum · lookups status[geplant|laufend|abgeschlossen|archiviert]
+ *   - anforderungen_und_randbedingungen: applookups vorgang→vorgaenge · lookups art[randbedingung|anforderung], prioritaet[hoch|mittel|niedrig], verlaesslichkeit[gesichert|wahrscheinlich|vermutet]
+ *   - entscheidungen_und_loesungswege: applookups vorgang→vorgaenge, anforderung→anforderungen_und_randbedingungen · lookups gueltigkeit[gueltig|ueberholt|widerrufen]
+ *   - ergebnisse_und_grenzen: applookups vorgang→vorgaenge, entscheidung→entscheidungen_und_loesungswege · lookups art[grenze|ergebnis], bewertung[erfolgreich|teilweise|nicht_erfolgreich], verlaesslichkeit[gesichert|wahrscheinlich|vermutet]
  *   - annahmen: applookups vorgang→vorgaenge, stuetzendes_ergebnis→ergebnisse_und_grenzen · lookups verlaesslichkeit[gesichert|wahrscheinlich|vermutet], pruefstatus[offen|bestaetigt|widerlegt]
  *   - regeln: applookups vorgang→vorgaenge, entscheidung→entscheidungen_und_loesungswege, ergebnis→ergebnisse_und_grenzen, annahme→annahmen · lookups verlaesslichkeitsgrad[hypothese|erprobt|bestaetigt], status[entwurf|gueltig|ausgesetzt|zurueckgezogen]
  */

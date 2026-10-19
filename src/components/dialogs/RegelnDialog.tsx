@@ -436,7 +436,7 @@ export function RegelnDialog({ open, onClose, onSubmit, defaultValues, recordId,
         <Label htmlFor="titel">{fieldLabel('regeln', 'titel')} <span className="text-destructive" aria-hidden="true">*</span></Label>
         <Input
           id="titel"
-          placeholder="z. B. Freigabe ab 5.000 Euro"
+          placeholder=""
           value={fields.titel ?? ''}
           onChange={e => setFields(f => ({ ...f, titel: e.target.value }))}
           required
@@ -451,7 +451,7 @@ export function RegelnDialog({ open, onClose, onSubmit, defaultValues, recordId,
         <Label htmlFor="regeltext">{fieldLabel('regeln', 'regeltext')} <span className="text-destructive" aria-hidden="true">*</span></Label>
         <Textarea
           id="regeltext"
-          placeholder="Was genau gilt?"
+          placeholder=""
           value={fields.regeltext ?? ''}
           onChange={e => setFields(f => ({ ...f, regeltext: e.target.value }))}
           rows={3}
@@ -466,7 +466,7 @@ export function RegelnDialog({ open, onClose, onSubmit, defaultValues, recordId,
         <Label htmlFor="geltungsbereich">{fieldLabel('regeln', 'geltungsbereich')}</Label>
         <Input
           id="geltungsbereich"
-          placeholder="z. B. Einkauf, Vertrieb"
+          placeholder=""
           value={fields.geltungsbereich ?? ''}
           onChange={e => setFields(f => ({ ...f, geltungsbereich: e.target.value }))}
         />
@@ -477,7 +477,7 @@ export function RegelnDialog({ open, onClose, onSubmit, defaultValues, recordId,
         <Label htmlFor="vorgang">{fieldLabel('regeln', 'vorgang')}</Label>
         <Combobox
           id="vorgang"
-          placeholder="Welcher Vorgang?"
+          placeholder=""
           items={vorgaengeListAll.map(r => ({
             id: r.record_id,
             label: String(r.fields.titel ?? r.record_id),
@@ -494,7 +494,7 @@ export function RegelnDialog({ open, onClose, onSubmit, defaultValues, recordId,
         <Label htmlFor="entscheidung">{fieldLabel('regeln', 'entscheidung')}</Label>
         <Combobox
           id="entscheidung"
-          placeholder="Welche Entscheidung?"
+          placeholder=""
           items={entscheidungenUndLoesungswegeListAll.map(r => ({
             id: r.record_id,
             label: String(r.fields.titel ?? r.record_id),
@@ -511,7 +511,7 @@ export function RegelnDialog({ open, onClose, onSubmit, defaultValues, recordId,
         <Label htmlFor="ergebnis">{fieldLabel('regeln', 'ergebnis')}</Label>
         <Combobox
           id="ergebnis"
-          placeholder="Welches Ergebnis?"
+          placeholder=""
           items={ergebnisseUndGrenzenListAll.map(r => ({
             id: r.record_id,
             label: String(r.fields.titel ?? r.record_id),
@@ -528,7 +528,7 @@ export function RegelnDialog({ open, onClose, onSubmit, defaultValues, recordId,
         <Label htmlFor="annahme">{fieldLabel('regeln', 'annahme')}</Label>
         <Combobox
           id="annahme"
-          placeholder="Welche Annahme?"
+          placeholder=""
           items={annahmenListAll.map(r => ({
             id: r.record_id,
             label: String(r.fields.aussage ?? r.record_id),
@@ -656,7 +656,7 @@ export function RegelnDialog({ open, onClose, onSubmit, defaultValues, recordId,
         <Label htmlFor="gueltig_ab">{fieldLabel('regeln', 'gueltig_ab')}</Label>
         <DatePicker
           id="gueltig_ab"
-          placeholder="Ab wann gilt die Regel?"
+          placeholder=""
           mode="date"
           value={fields.gueltig_ab ?? null}
           onChange={v => setFields(f => ({ ...f, gueltig_ab: v ?? undefined }))}
@@ -668,7 +668,7 @@ export function RegelnDialog({ open, onClose, onSubmit, defaultValues, recordId,
         <Label htmlFor="naechste_pruefung">{fieldLabel('regeln', 'naechste_pruefung')}</Label>
         <DatePicker
           id="naechste_pruefung"
-          placeholder="Wann wird geprüft?"
+          placeholder=""
           mode="date"
           value={fields.naechste_pruefung ?? null}
           onChange={v => setFields(f => ({ ...f, naechste_pruefung: v ?? undefined }))}
@@ -680,7 +680,7 @@ export function RegelnDialog({ open, onClose, onSubmit, defaultValues, recordId,
         <Label htmlFor="ki_hinweis">{fieldLabel('regeln', 'ki_hinweis')}</Label>
         <Textarea
           id="ki_hinweis"
-          placeholder="Was soll die KI beachten?"
+          placeholder=""
           value={fields.ki_hinweis ?? ''}
           onChange={e => setFields(f => ({ ...f, ki_hinweis: e.target.value }))}
           rows={3}
@@ -707,7 +707,7 @@ export function RegelnDialog({ open, onClose, onSubmit, defaultValues, recordId,
   // eine Map { lookupKey: label } für ALLE Felder des Target-Schemas. Wird
   // beim Render-Walk gefiltert auf die in der computed-Formel tatsächlich
   // referenzierten lookupKeys (siehe applookupRefs unten).
-  const APPLOOKUP_LABELS: Record<string, Record<string, string>> = {"vorgang": {"titel": "Titel", "beschreibung": "Beschreibung", "bereich": "Bereich oder Team", "verantwortlich_vorname": "Verantwortliche Person (Vorname)", "verantwortlich_nachname": "Verantwortliche Person (Nachname)", "status": "Status", "startdatum": "Startdatum", "enddatum": "Enddatum", "werkzeuge": "Eingesetzte Werkzeuge und KI-Modelle", "uebergabehinweise": "Übergabehinweise"}, "entscheidung": {"vorgang": "Vorgang", "anforderung": "Bezug zu Anforderung oder Randbedingung", "titel": "Titel der Entscheidung", "entscheidungsdatum": "Entscheidungsdatum", "entscheider_vorname": "Entscheider (Vorname)", "entscheider_nachname": "Entscheider (Nachname)", "begruendung": "Begründung", "alternativen": "Betrachtete Alternativen", "loesungsweg": "Verwendeter Lösungsweg", "werkzeug": "Eingesetztes Werkzeug oder Modell", "gueltigkeit": "Gültigkeitsstatus"}, "ergebnis": {"vorgang": "Vorgang", "entscheidung": "Zugehörige Entscheidung", "art": "Art", "titel": "Titel", "beschreibung": "Beschreibung", "beobachtungsdatum": "Beobachtungsdatum", "bewertung": "Bewertung", "verlaesslichkeit": "Verlässlichkeit", "auswirkung": "Auswirkung"}, "annahme": {"vorgang": "Vorgang", "aussage": "Aussage der Annahme", "begruendung": "Begründung", "verlaesslichkeit": "Verlässlichkeit", "pruefstatus": "Prüfstatus", "pruefdatum": "Prüfdatum", "pruefergebnis": "Prüfergebnis", "stuetzendes_ergebnis": "Stützendes Ergebnis"}};
+  const APPLOOKUP_LABELS: Record<string, Record<string, string>> = {"vorgang": {"titel": "Titel", "beschreibung": "Beschreibung", "bereich": "Bereich oder Team", "verantwortlich_vorname": "Verantwortliche Person (Vorname)", "verantwortlich_nachname": "Verantwortliche Person (Nachname)", "status": "Status", "startdatum": "Startdatum", "enddatum": "Enddatum", "werkzeuge": "Eingesetzte Werkzeuge und KI-Modelle", "uebergabehinweise": "Übergabehinweise"}, "entscheidung": {"vorgang": "Vorgang", "anforderung": "Bezug zu Anforderung oder Randbedingung", "titel": "Titel der Entscheidung", "entscheidungsdatum": "Entscheidungsdatum", "entscheider_vorname": "Entscheider (Vorname)", "entscheider_nachname": "Entscheider (Nachname)", "begruendung": "Begründung", "alternativen": "Betrachtete Alternativen", "loesungsweg": "Verwendeter Lösungsweg", "werkzeug": "Eingesetztes Werkzeug oder Modell", "gueltigkeit": "Gültigkeitsstatus"}, "ergebnis": {"vorgang": "Vorgang", "entscheidung": "Zugehörige Entscheidung", "art": "Art", "titel": "Titel", "beschreibung": "Beschreibung", "beobachtungsdatum": "Beobachtungsdatum", "bewertung": "Bewertung", "verlaesslichkeit": "Verlässlichkeit", "auswirkung": "Auswirkung"}, "annahme": {"vorgang": "Vorgang", "aussage": "Aussage der Annahme", "begruendung": "Begründung", "verlaesslichkeit": "Verlässlichkeit", "pruefstatus": "Prüfstatus", "pruefdatum": "Prüfdatum", "pruefergebnis": "Prüfergebnis", "stuetzendes_ergebnis": "Stützendes Ergebnis", "upload": "Upload"}};
   const inputFields = useMemo(() => flattenFieldOrder(orderedFields), [orderedFieldsKey]);
   const backendFieldSet = useMemo(() => new Set(inputFields), [inputFields.join(',')]);
   const virtualComputed = useMemo(

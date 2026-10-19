@@ -299,7 +299,7 @@ export function EntscheidungenUndLoesungswegeDialog({ open, onClose, onSubmit, d
         }
       }
       const photoContext = contextParts.length ? contextParts.join('\n') : undefined;
-      const schema = `{\n  "vorgang": string | null, // Display name from Vorgänge (see <available-records>)\n  "anforderung": string | null, // Display name from Anforderungen und Randbedingungen (see <available-records>)\n  "titel": string | null, // Titel der Entscheidung\n  "entscheidungsdatum": string | null, // YYYY-MM-DD\n  "entscheider_vorname": string | null, // Entscheider (Vorname)\n  "entscheider_nachname": string | null, // Entscheider (Nachname)\n  "begruendung": string | null, // Begründung\n  "alternativen": string | null, // Betrachtete Alternativen\n  "loesungsweg": string | null, // Verwendeter Lösungsweg\n  "werkzeug": string | null, // Eingesetztes Werkzeug oder Modell\n  "gueltigkeit": LookupValue | null, // Gültigkeitsstatus (select one key: "ueberholt" | "widerrufen" | "gueltig") mapping: ueberholt=Überholt, widerrufen=Widerrufen, gueltig=Gültig\n}`;
+      const schema = `{\n  "vorgang": string | null, // Display name from Vorgänge (see <available-records>)\n  "anforderung": string | null, // Display name from Anforderungen und Randbedingungen (see <available-records>)\n  "titel": string | null, // Titel der Entscheidung\n  "entscheidungsdatum": string | null, // YYYY-MM-DD\n  "entscheider_vorname": string | null, // Entscheider (Vorname)\n  "entscheider_nachname": string | null, // Entscheider (Nachname)\n  "begruendung": string | null, // Begründung\n  "alternativen": string | null, // Betrachtete Alternativen\n  "loesungsweg": string | null, // Verwendeter Lösungsweg\n  "werkzeug": string | null, // Eingesetztes Werkzeug oder Modell\n  "gueltigkeit": LookupValue | null, // Gültigkeitsstatus (select one key: "gueltig" | "ueberholt" | "widerrufen") mapping: gueltig=Gültig, ueberholt=Überholt, widerrufen=Widerrufen\n}`;
       const raw = await extractFromInput<Record<string, unknown>>(schema, {
         dataUri: uri,
         userText: aiText.trim() || undefined,
@@ -378,7 +378,7 @@ export function EntscheidungenUndLoesungswegeDialog({ open, onClose, onSubmit, d
         <Label htmlFor="vorgang">{fieldLabel('entscheidungen_und_loesungswege', 'vorgang')} <span className="text-destructive" aria-hidden="true">*</span></Label>
         <Combobox
           id="vorgang"
-          placeholder="Welcher Vorgang?"
+          placeholder=""
           items={vorgaengeListAll.map(r => ({
             id: r.record_id,
             label: String(r.fields.titel ?? r.record_id),
@@ -398,7 +398,7 @@ export function EntscheidungenUndLoesungswegeDialog({ open, onClose, onSubmit, d
         <Label htmlFor="anforderung">{fieldLabel('entscheidungen_und_loesungswege', 'anforderung')}</Label>
         <Combobox
           id="anforderung"
-          placeholder="Welche Anforderung betrifft es?"
+          placeholder=""
           items={anforderungenUndRandbedingungenListAll.map(r => ({
             id: r.record_id,
             label: String(r.fields.titel ?? r.record_id),
@@ -415,7 +415,7 @@ export function EntscheidungenUndLoesungswegeDialog({ open, onClose, onSubmit, d
         <Label htmlFor="titel">{fieldLabel('entscheidungen_und_loesungswege', 'titel')} <span className="text-destructive" aria-hidden="true">*</span></Label>
         <Input
           id="titel"
-          placeholder="z. B. Wechsel auf Cloud-Hosting"
+          placeholder=""
           value={fields.titel ?? ''}
           onChange={e => setFields(f => ({ ...f, titel: e.target.value }))}
           required
@@ -430,7 +430,7 @@ export function EntscheidungenUndLoesungswegeDialog({ open, onClose, onSubmit, d
         <Label htmlFor="entscheidungsdatum">{fieldLabel('entscheidungen_und_loesungswege', 'entscheidungsdatum')}</Label>
         <DatePicker
           id="entscheidungsdatum"
-          placeholder="Wann wurde entschieden?"
+          placeholder=""
           mode="date"
           value={fields.entscheidungsdatum ?? null}
           onChange={v => setFields(f => ({ ...f, entscheidungsdatum: v ?? undefined }))}
@@ -442,7 +442,7 @@ export function EntscheidungenUndLoesungswegeDialog({ open, onClose, onSubmit, d
         <Label htmlFor="entscheider_vorname">{fieldLabel('entscheidungen_und_loesungswege', 'entscheider_vorname')}</Label>
         <Input
           id="entscheider_vorname"
-          placeholder="z. B. Anna"
+          placeholder=""
           value={fields.entscheider_vorname ?? ''}
           onChange={e => setFields(f => ({ ...f, entscheider_vorname: e.target.value }))}
         />
@@ -453,7 +453,7 @@ export function EntscheidungenUndLoesungswegeDialog({ open, onClose, onSubmit, d
         <Label htmlFor="entscheider_nachname">{fieldLabel('entscheidungen_und_loesungswege', 'entscheider_nachname')}</Label>
         <Input
           id="entscheider_nachname"
-          placeholder="z. B. Müller"
+          placeholder=""
           value={fields.entscheider_nachname ?? ''}
           onChange={e => setFields(f => ({ ...f, entscheider_nachname: e.target.value }))}
         />
@@ -464,7 +464,7 @@ export function EntscheidungenUndLoesungswegeDialog({ open, onClose, onSubmit, d
         <Label htmlFor="begruendung">{fieldLabel('entscheidungen_und_loesungswege', 'begruendung')}</Label>
         <Textarea
           id="begruendung"
-          placeholder="Warum wurde so entschieden?"
+          placeholder=""
           value={fields.begruendung ?? ''}
           onChange={e => setFields(f => ({ ...f, begruendung: e.target.value }))}
           rows={3}
@@ -476,7 +476,7 @@ export function EntscheidungenUndLoesungswegeDialog({ open, onClose, onSubmit, d
         <Label htmlFor="alternativen">{fieldLabel('entscheidungen_und_loesungswege', 'alternativen')}</Label>
         <Textarea
           id="alternativen"
-          placeholder="Eine Alternative pro Zeile"
+          placeholder=""
           value={fields.alternativen ?? ''}
           onChange={e => setFields(f => ({ ...f, alternativen: e.target.value }))}
           rows={3}
@@ -488,7 +488,7 @@ export function EntscheidungenUndLoesungswegeDialog({ open, onClose, onSubmit, d
         <Label htmlFor="loesungsweg">{fieldLabel('entscheidungen_und_loesungswege', 'loesungsweg')}</Label>
         <Textarea
           id="loesungsweg"
-          placeholder="Wie wurde es gelöst?"
+          placeholder=""
           value={fields.loesungsweg ?? ''}
           onChange={e => setFields(f => ({ ...f, loesungsweg: e.target.value }))}
           rows={3}
@@ -500,7 +500,7 @@ export function EntscheidungenUndLoesungswegeDialog({ open, onClose, onSubmit, d
         <Label htmlFor="werkzeug">{fieldLabel('entscheidungen_und_loesungswege', 'werkzeug')}</Label>
         <Input
           id="werkzeug"
-          placeholder="z. B. Excel, Entscheidungsmatrix"
+          placeholder=""
           value={fields.werkzeug ?? ''}
           onChange={e => setFields(f => ({ ...f, werkzeug: e.target.value }))}
         />
@@ -510,6 +510,19 @@ export function EntscheidungenUndLoesungswegeDialog({ open, onClose, onSubmit, d
       <div key="gueltigkeit" className="space-y-1.5">
         <Label htmlFor="gueltigkeit">{fieldLabel('entscheidungen_und_loesungswege', 'gueltigkeit')} <span className="text-destructive" aria-hidden="true">*</span></Label>
         <div role="radiogroup" className="flex flex-wrap gap-1.5">
+          <button
+            type="button"
+            role="radio"
+            aria-checked={lookupKey(fields.gueltigkeit) === 'gueltig'}
+            onClick={() => setFields(f => ({ ...f, gueltigkeit: (lookupKey(f.gueltigkeit) === 'gueltig' ? undefined : 'gueltig') as any }))}
+            className={`inline-flex items-center justify-center min-h-9 max-sm:min-h-11 max-sm:px-4 rounded-full border px-3 py-1.5 text-sm font-medium transition-colors ${
+              lookupKey(fields.gueltigkeit) === 'gueltig'
+                ? 'bg-foreground text-background border-foreground'
+                : 'bg-background text-foreground border-input hover:bg-accent'
+            }`}
+          >
+            {lookupLabel('entscheidungen_und_loesungswege', 'gueltigkeit', 'gueltig') ?? 'Gültig'}
+          </button>
           <button
             type="button"
             role="radio"
@@ -535,19 +548,6 @@ export function EntscheidungenUndLoesungswegeDialog({ open, onClose, onSubmit, d
             }`}
           >
             {lookupLabel('entscheidungen_und_loesungswege', 'gueltigkeit', 'widerrufen') ?? 'Widerrufen'}
-          </button>
-          <button
-            type="button"
-            role="radio"
-            aria-checked={lookupKey(fields.gueltigkeit) === 'gueltig'}
-            onClick={() => setFields(f => ({ ...f, gueltigkeit: (lookupKey(f.gueltigkeit) === 'gueltig' ? undefined : 'gueltig') as any }))}
-            className={`inline-flex items-center justify-center min-h-9 max-sm:min-h-11 max-sm:px-4 rounded-full border px-3 py-1.5 text-sm font-medium transition-colors ${
-              lookupKey(fields.gueltigkeit) === 'gueltig'
-                ? 'bg-foreground text-background border-foreground'
-                : 'bg-background text-foreground border-input hover:bg-accent'
-            }`}
-          >
-            {lookupLabel('entscheidungen_und_loesungswege', 'gueltigkeit', 'gueltig') ?? 'Gültig'}
           </button>
         </div>
         {showErrors && !fields.gueltigkeit && (

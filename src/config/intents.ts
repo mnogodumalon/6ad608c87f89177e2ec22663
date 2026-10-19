@@ -43,12 +43,12 @@ export interface IntentLink {
 
 export const INTENTS: IntentLink[] = [
   // <custom:intents>
-  { path: '/intents/vorgang-anlegen', label: { de: 'Vorgang anlegen', en: 'Create case' }, icon: IconFolderPlus, description: 'Neuen Vorgang mit Verantwortlichen, Zeitraum und eingesetzten Werkzeugen erfassen und direkt erste Anforderungen dazu festhalten.' },
-  { path: '/intents/entscheidung-dokumentieren', label: { de: 'Entscheidung dokumentieren', en: 'Document decision' }, icon: IconGavel, description: 'Eine Entscheidung mit Begründung, Alternativen und Lösungsweg zu einem Vorgang und ggf. einer Anforderung festhalten.' },
-  { path: '/intents/ergebnis-festhalten', label: { de: 'Ergebnis oder Grenze festhalten', en: 'Record result or limit' }, icon: IconFlag, description: 'Ein beobachtetes Ergebnis oder eine erkannte Grenze zu einer Entscheidung erfassen, mit Verlässlichkeit.' },
-  { path: '/intents/annahme-pruefen', label: { de: 'Annahme prüfen', en: 'Review assumption' }, icon: IconChecklist, description: 'Eine offene Annahme bestätigen oder widerlegen, mit Prüfergebnis und stützendem Ergebnis.' },
-  { path: '/intents/regel-ableiten', label: { de: 'Regel ableiten', en: 'Derive rule' }, icon: IconRulerMeasure, description: 'Aus einer Entscheidung, einem Ergebnis oder einer bestätigten Annahme eine Regel als Entwurf formulieren.' },
-  { path: '/intents/vorgang-abschliessen', label: { de: 'Vorgang abschließen und übergeben', en: 'Close and hand over case' }, icon: IconArchive, description: 'Einen Vorgang mit Enddatum und Übergabehinweisen abschließen, damit das Wissen bei Wechsel erhalten bleibt.' },
+  { path: '/intents/vorgang-anlegen', label: { de: 'Vorgang anlegen', en: 'Create case' }, icon: IconFolderPlus, description: { de: 'Neuen Vorgang mit Verantwortlichen, Zeitraum und eingesetzten Werkzeugen erfassen und direkt erste Anforderungen dazu festhalten.', en: 'Record a new process with owners, time period and tools used, and directly capture initial requirements for it.' } },
+  { path: '/intents/entscheidung-dokumentieren', label: { de: 'Entscheidung dokumentieren', en: 'Document decision' }, icon: IconGavel, description: { de: 'Eine Entscheidung mit Begründung, Alternativen und Lösungsweg zu einem Vorgang und ggf. einer Anforderung festhalten.', en: 'Record a decision with rationale, alternatives and solution path for a process and, if applicable, a requirement.' } },
+  { path: '/intents/ergebnis-festhalten', label: { de: 'Ergebnis oder Grenze festhalten', en: 'Record result or limit' }, icon: IconFlag, description: { de: 'Ein beobachtetes Ergebnis oder eine erkannte Grenze zu einer Entscheidung erfassen, mit Verlässlichkeit.', en: 'Record an observed result or identified limitation for a decision, with reliability.' } },
+  { path: '/intents/annahme-pruefen', label: { de: 'Annahme prüfen', en: 'Review assumption' }, icon: IconChecklist, description: { de: 'Eine offene Annahme bestätigen oder widerlegen, mit Prüfergebnis und stützendem Ergebnis.', en: 'Confirm or refute an open assumption, with test result and supporting result.' } },
+  { path: '/intents/regel-ableiten', label: { de: 'Regel ableiten', en: 'Derive rule' }, icon: IconRulerMeasure, description: { de: 'Aus einer Entscheidung, einem Ergebnis oder einer bestätigten Annahme eine Regel als Entwurf formulieren.', en: 'Draft a rule from a decision, a result or a confirmed assumption.' } },
+  { path: '/intents/vorgang-abschliessen', label: { de: 'Vorgang abschließen und übergeben', en: 'Close and hand over case' }, icon: IconArchive, description: { de: 'Einen Vorgang mit Enddatum und Übergabehinweisen abschließen, damit das Wissen bei Wechsel erhalten bleibt.', en: 'Close a process with an end date and handover notes so that knowledge is preserved when people change.' } },
   // </custom:intents>
 ];
 
@@ -68,5 +68,5 @@ export const INTENTS_PENDING = false;
  * pulsing "werden erstellt …" in every deployed Phase-1 bundle forever — no
  * code path redeploys Phase 1 without the flag (live 03.09.2026).
  */
-export const INTENTS_PENDING_SINCE: string | null = '2026-10-19T12:12:12+00:00';
+export const INTENTS_PENDING_SINCE: string | null = null;
 export const PENDING_MAX_MINUTES = 30;

@@ -30,7 +30,7 @@
           "fulltype": "string/textarea",
           "description": "A string value that can contain multiple lines of text (or `null`/`None`).",
           "required": false,
-          "in_list": true,
+          "in_list": false,
           "in_mobile_list": true,
           "in_text": false,
           "in_structured_search": null,
@@ -97,10 +97,10 @@
           "in_fulltext_search": null,
           "in_expert_search": true,
           "lookup_data": {
+            "geplant": "Geplant",
             "laufend": "Laufend",
             "abgeschlossen": "Abgeschlossen",
-            "archiviert": "Archiviert",
-            "geplant": "Geplant"
+            "archiviert": "Archiviert"
           }
         },
         "startdatum": {
@@ -178,7 +178,7 @@
           "fulltype": "applookup/select",
           "description": "A reference to a LivingApp record from the target lookup app 'Vorgänge' with the id `6ad6089f062265487455a269` (or `null`/`None`).\n\nThe field value will be a valid record URL in the form `https://my.living-apps.de/rest/apps/6ad6089f062265487455a269/records/<record-id>` (or `null`/`None`).\n\nWhen writing, either pass a record URL through exactly as this API returned it, or send the portable relative form `/apps/6ad6089f062265487455a269/records/<record-id>`. Other equivalent record-URL forms are accepted as well.\n\nDisplayed as single-select field in HTML pages.",
           "required": true,
-          "in_list": true,
+          "in_list": false,
           "in_mobile_list": true,
           "in_text": true,
           "in_structured_search": null,
@@ -194,15 +194,15 @@
           "fulltype": "lookup/radio",
           "description": "One selected option of multiple available options (or `null`/`None`).\n\nThe available options are defined in the `lookup_data` attribute of this control.\n\nThe field value will be the key in this `lookup_data` attribute (or `null`/`None`).\n\nDisplayed as radio button fields in HTML pages.",
           "required": true,
-          "in_list": true,
+          "in_list": false,
           "in_mobile_list": true,
           "in_text": true,
           "in_structured_search": null,
           "in_fulltext_search": true,
           "in_expert_search": true,
           "lookup_data": {
-            "anforderung": "Ursprüngliche Anforderung",
-            "randbedingung": "Tatsächliche Randbedingung"
+            "randbedingung": "Tatsächliche Randbedingung",
+            "anforderung": "Ursprüngliche Anforderung"
           }
         },
         "titel": {
@@ -228,7 +228,7 @@
           "fulltype": "string/textarea",
           "description": "A string value that can contain multiple lines of text (or `null`/`None`).",
           "required": false,
-          "in_list": true,
+          "in_list": false,
           "in_mobile_list": false,
           "in_text": false,
           "in_structured_search": null,
@@ -320,7 +320,7 @@
           "fulltype": "applookup/select",
           "description": "A reference to a LivingApp record from the target lookup app 'Vorgänge' with the id `6ad6089f062265487455a269` (or `null`/`None`).\n\nThe field value will be a valid record URL in the form `https://my.living-apps.de/rest/apps/6ad6089f062265487455a269/records/<record-id>` (or `null`/`None`).\n\nWhen writing, either pass a record URL through exactly as this API returned it, or send the portable relative form `/apps/6ad6089f062265487455a269/records/<record-id>`. Other equivalent record-URL forms are accepted as well.\n\nDisplayed as single-select field in HTML pages.",
           "required": true,
-          "in_list": true,
+          "in_list": false,
           "in_mobile_list": true,
           "in_text": true,
           "in_structured_search": null,
@@ -336,7 +336,7 @@
           "fulltype": "applookup/select",
           "description": "A reference to a LivingApp record from the target lookup app 'Anforderungen und Randbedingungen' with the id `6ad608a567052c6bd2ec4445` (or `null`/`None`).\n\nThe field value will be a valid record URL in the form `https://my.living-apps.de/rest/apps/6ad608a567052c6bd2ec4445/records/<record-id>` (or `null`/`None`).\n\nWhen writing, either pass a record URL through exactly as this API returned it, or send the portable relative form `/apps/6ad608a567052c6bd2ec4445/records/<record-id>`. Other equivalent record-URL forms are accepted as well.\n\nDisplayed as single-select field in HTML pages.",
           "required": false,
-          "in_list": true,
+          "in_list": false,
           "in_mobile_list": true,
           "in_text": true,
           "in_structured_search": null,
@@ -367,7 +367,7 @@
           "fulltype": "date/date",
           "description": "A calendar date consisting of year, month and day (or `null`/`None`)\n\nThe field value will be a string in the format `<YYYY>-<MM>-<DD>` (or `null`/`None`).\n\nFor example: `2000-02-29`.\n\nFor `POST`/`PUT`/`PATCH` requests the REST API uses a liberal parsing approach so that strings like `2026`, `February 29, 2000 12:34 MEST`, `letztes Jahr` etc. will be accepted as value date values. However this runs the risk of parsing ambiguous values incorrectly. To ensure reliable parsing it is best to use the canonical format specified above.",
           "required": false,
-          "in_list": true,
+          "in_list": false,
           "in_mobile_list": false,
           "in_text": false,
           "in_structured_search": null,
@@ -479,9 +479,9 @@
           "in_fulltext_search": null,
           "in_expert_search": true,
           "lookup_data": {
+            "gueltig": "Gültig",
             "ueberholt": "Überholt",
-            "widerrufen": "Widerrufen",
-            "gueltig": "Gültig"
+            "widerrufen": "Widerrufen"
           }
         }
       }
@@ -499,7 +499,7 @@
           "fulltype": "applookup/select",
           "description": "A reference to a LivingApp record from the target lookup app 'Vorgänge' with the id `6ad6089f062265487455a269` (or `null`/`None`).\n\nThe field value will be a valid record URL in the form `https://my.living-apps.de/rest/apps/6ad6089f062265487455a269/records/<record-id>` (or `null`/`None`).\n\nWhen writing, either pass a record URL through exactly as this API returned it, or send the portable relative form `/apps/6ad6089f062265487455a269/records/<record-id>`. Other equivalent record-URL forms are accepted as well.\n\nDisplayed as single-select field in HTML pages.",
           "required": true,
-          "in_list": true,
+          "in_list": false,
           "in_mobile_list": true,
           "in_text": true,
           "in_structured_search": null,
@@ -515,7 +515,7 @@
           "fulltype": "applookup/select",
           "description": "A reference to a LivingApp record from the target lookup app 'Entscheidungen und Lösungswege' with the id `6ad608a7bc1bd803e82e680e` (or `null`/`None`).\n\nThe field value will be a valid record URL in the form `https://my.living-apps.de/rest/apps/6ad608a7bc1bd803e82e680e/records/<record-id>` (or `null`/`None`).\n\nWhen writing, either pass a record URL through exactly as this API returned it, or send the portable relative form `/apps/6ad608a7bc1bd803e82e680e/records/<record-id>`. Other equivalent record-URL forms are accepted as well.\n\nDisplayed as single-select field in HTML pages.",
           "required": false,
-          "in_list": true,
+          "in_list": false,
           "in_mobile_list": true,
           "in_text": true,
           "in_structured_search": null,
@@ -531,15 +531,15 @@
           "fulltype": "lookup/radio",
           "description": "One selected option of multiple available options (or `null`/`None`).\n\nThe available options are defined in the `lookup_data` attribute of this control.\n\nThe field value will be the key in this `lookup_data` attribute (or `null`/`None`).\n\nDisplayed as radio button fields in HTML pages.",
           "required": true,
-          "in_list": true,
+          "in_list": false,
           "in_mobile_list": false,
           "in_text": false,
           "in_structured_search": null,
           "in_fulltext_search": true,
           "in_expert_search": true,
           "lookup_data": {
-            "ergebnis": "Beobachtetes Ergebnis",
-            "grenze": "Erkannte Grenze"
+            "grenze": "Erkannte Grenze",
+            "ergebnis": "Beobachtetes Ergebnis"
           }
         },
         "titel": {
@@ -565,7 +565,7 @@
           "fulltype": "string/textarea",
           "description": "A string value that can contain multiple lines of text (or `null`/`None`).",
           "required": false,
-          "in_list": true,
+          "in_list": false,
           "in_mobile_list": false,
           "in_text": false,
           "in_structured_search": null,
@@ -780,6 +780,21 @@
           "in_fulltext_search": null,
           "in_expert_search": true,
           "lookup_app": "https://my.living-apps.de/rest/apps/6ad608a856aeb3d7ca75889e"
+        },
+        "upload": {
+          "identifier": "upload",
+          "label": "Upload",
+          "type": "file",
+          "subtype": null,
+          "fulltype": "file",
+          "description": "An uploaded file (or `null`/`None`).\n\nThe field value will be the URL to download the file in the form `https://my.living-apps.de/files/6ad608a95bf6600981483018/data/<record-id>/<control-identifier>/<internal-id>` (or `null`/`None`).",
+          "required": false,
+          "in_list": false,
+          "in_mobile_list": false,
+          "in_text": false,
+          "in_structured_search": null,
+          "in_fulltext_search": null,
+          "in_expert_search": true
         }
       }
     },
@@ -811,7 +826,7 @@
           "fulltype": "string/textarea",
           "description": "A string value that can contain multiple lines of text (or `null`/`None`).",
           "required": true,
-          "in_list": true,
+          "in_list": false,
           "in_mobile_list": true,
           "in_text": false,
           "in_structured_search": null,
@@ -841,7 +856,7 @@
           "fulltype": "applookup/select",
           "description": "A reference to a LivingApp record from the target lookup app 'Vorgänge' with the id `6ad6089f062265487455a269` (or `null`/`None`).\n\nThe field value will be a valid record URL in the form `https://my.living-apps.de/rest/apps/6ad6089f062265487455a269/records/<record-id>` (or `null`/`None`).\n\nWhen writing, either pass a record URL through exactly as this API returned it, or send the portable relative form `/apps/6ad6089f062265487455a269/records/<record-id>`. Other equivalent record-URL forms are accepted as well.\n\nDisplayed as single-select field in HTML pages.",
           "required": false,
-          "in_list": true,
+          "in_list": false,
           "in_mobile_list": false,
           "in_text": false,
           "in_structured_search": null,
@@ -857,7 +872,7 @@
           "fulltype": "applookup/select",
           "description": "A reference to a LivingApp record from the target lookup app 'Entscheidungen und Lösungswege' with the id `6ad608a7bc1bd803e82e680e` (or `null`/`None`).\n\nThe field value will be a valid record URL in the form `https://my.living-apps.de/rest/apps/6ad608a7bc1bd803e82e680e/records/<record-id>` (or `null`/`None`).\n\nWhen writing, either pass a record URL through exactly as this API returned it, or send the portable relative form `/apps/6ad608a7bc1bd803e82e680e/records/<record-id>`. Other equivalent record-URL forms are accepted as well.\n\nDisplayed as single-select field in HTML pages.",
           "required": false,
-          "in_list": true,
+          "in_list": false,
           "in_mobile_list": false,
           "in_text": false,
           "in_structured_search": null,

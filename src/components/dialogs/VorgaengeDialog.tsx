@@ -245,7 +245,7 @@ export function VorgaengeDialog({ open, onClose, onSubmit, defaultValues, record
         }
       }
       const photoContext = contextParts.length ? contextParts.join('\n') : undefined;
-      const schema = `{\n  "titel": string | null, // Titel\n  "beschreibung": string | null, // Beschreibung\n  "bereich": string | null, // Bereich oder Team\n  "verantwortlich_vorname": string | null, // Verantwortliche Person (Vorname)\n  "verantwortlich_nachname": string | null, // Verantwortliche Person (Nachname)\n  "status": LookupValue | null, // Status (select one key: "laufend" | "abgeschlossen" | "archiviert" | "geplant") mapping: laufend=Laufend, abgeschlossen=Abgeschlossen, archiviert=Archiviert, geplant=Geplant\n  "startdatum": string | null, // YYYY-MM-DD\n  "enddatum": string | null, // YYYY-MM-DD\n  "werkzeuge": string | null, // Eingesetzte Werkzeuge und KI-Modelle\n  "uebergabehinweise": string | null, // Übergabehinweise\n}`;
+      const schema = `{\n  "titel": string | null, // Titel\n  "beschreibung": string | null, // Beschreibung\n  "bereich": string | null, // Bereich oder Team\n  "verantwortlich_vorname": string | null, // Verantwortliche Person (Vorname)\n  "verantwortlich_nachname": string | null, // Verantwortliche Person (Nachname)\n  "status": LookupValue | null, // Status (select one key: "geplant" | "laufend" | "abgeschlossen" | "archiviert") mapping: geplant=Geplant, laufend=Laufend, abgeschlossen=Abgeschlossen, archiviert=Archiviert\n  "startdatum": string | null, // YYYY-MM-DD\n  "enddatum": string | null, // YYYY-MM-DD\n  "werkzeuge": string | null, // Eingesetzte Werkzeuge und KI-Modelle\n  "uebergabehinweise": string | null, // Übergabehinweise\n}`;
       const raw = await extractFromInput<Record<string, unknown>>(schema, {
         dataUri: uri,
         userText: aiText.trim() || undefined,
@@ -312,7 +312,7 @@ export function VorgaengeDialog({ open, onClose, onSubmit, defaultValues, record
         <Label htmlFor="titel">{fieldLabel('vorgaenge', 'titel')} <span className="text-destructive" aria-hidden="true">*</span></Label>
         <Input
           id="titel"
-          placeholder="z. B. Einführung neues CRM"
+          placeholder=""
           value={fields.titel ?? ''}
           onChange={e => setFields(f => ({ ...f, titel: e.target.value }))}
           required
@@ -327,7 +327,7 @@ export function VorgaengeDialog({ open, onClose, onSubmit, defaultValues, record
         <Label htmlFor="beschreibung">{fieldLabel('vorgaenge', 'beschreibung')}</Label>
         <Textarea
           id="beschreibung"
-          placeholder="Worum geht es im Vorgang?"
+          placeholder=""
           value={fields.beschreibung ?? ''}
           onChange={e => setFields(f => ({ ...f, beschreibung: e.target.value }))}
           rows={3}
@@ -339,7 +339,7 @@ export function VorgaengeDialog({ open, onClose, onSubmit, defaultValues, record
         <Label htmlFor="bereich">{fieldLabel('vorgaenge', 'bereich')}</Label>
         <Input
           id="bereich"
-          placeholder="z. B. Vertrieb, IT"
+          placeholder=""
           value={fields.bereich ?? ''}
           onChange={e => setFields(f => ({ ...f, bereich: e.target.value }))}
         />
@@ -350,7 +350,7 @@ export function VorgaengeDialog({ open, onClose, onSubmit, defaultValues, record
         <Label htmlFor="verantwortlich_vorname">{fieldLabel('vorgaenge', 'verantwortlich_vorname')}</Label>
         <Input
           id="verantwortlich_vorname"
-          placeholder="z. B. Anna"
+          placeholder=""
           value={fields.verantwortlich_vorname ?? ''}
           onChange={e => setFields(f => ({ ...f, verantwortlich_vorname: e.target.value }))}
         />
@@ -361,7 +361,7 @@ export function VorgaengeDialog({ open, onClose, onSubmit, defaultValues, record
         <Label htmlFor="verantwortlich_nachname">{fieldLabel('vorgaenge', 'verantwortlich_nachname')}</Label>
         <Input
           id="verantwortlich_nachname"
-          placeholder="z. B. Müller"
+          placeholder=""
           value={fields.verantwortlich_nachname ?? ''}
           onChange={e => setFields(f => ({ ...f, verantwortlich_nachname: e.target.value }))}
         />
@@ -371,6 +371,19 @@ export function VorgaengeDialog({ open, onClose, onSubmit, defaultValues, record
       <div key="status" className="space-y-1.5">
         <Label htmlFor="status">{fieldLabel('vorgaenge', 'status')} <span className="text-destructive" aria-hidden="true">*</span></Label>
         <div role="radiogroup" className="flex flex-wrap gap-1.5">
+          <button
+            type="button"
+            role="radio"
+            aria-checked={lookupKey(fields.status) === 'geplant'}
+            onClick={() => setFields(f => ({ ...f, status: (lookupKey(f.status) === 'geplant' ? undefined : 'geplant') as any }))}
+            className={`inline-flex items-center justify-center min-h-9 max-sm:min-h-11 max-sm:px-4 rounded-full border px-3 py-1.5 text-sm font-medium transition-colors ${
+              lookupKey(fields.status) === 'geplant'
+                ? 'bg-foreground text-background border-foreground'
+                : 'bg-background text-foreground border-input hover:bg-accent'
+            }`}
+          >
+            {lookupLabel('vorgaenge', 'status', 'geplant') ?? 'Geplant'}
+          </button>
           <button
             type="button"
             role="radio"
@@ -410,19 +423,6 @@ export function VorgaengeDialog({ open, onClose, onSubmit, defaultValues, record
           >
             {lookupLabel('vorgaenge', 'status', 'archiviert') ?? 'Archiviert'}
           </button>
-          <button
-            type="button"
-            role="radio"
-            aria-checked={lookupKey(fields.status) === 'geplant'}
-            onClick={() => setFields(f => ({ ...f, status: (lookupKey(f.status) === 'geplant' ? undefined : 'geplant') as any }))}
-            className={`inline-flex items-center justify-center min-h-9 max-sm:min-h-11 max-sm:px-4 rounded-full border px-3 py-1.5 text-sm font-medium transition-colors ${
-              lookupKey(fields.status) === 'geplant'
-                ? 'bg-foreground text-background border-foreground'
-                : 'bg-background text-foreground border-input hover:bg-accent'
-            }`}
-          >
-            {lookupLabel('vorgaenge', 'status', 'geplant') ?? 'Geplant'}
-          </button>
         </div>
         {showErrors && !fields.status && (
           <p className="text-xs text-destructive mt-1" role="alert">{requiredMessage('vorgaenge', 'status')}</p>
@@ -434,7 +434,7 @@ export function VorgaengeDialog({ open, onClose, onSubmit, defaultValues, record
         <Label htmlFor="startdatum">{fieldLabel('vorgaenge', 'startdatum')}</Label>
         <DatePicker
           id="startdatum"
-          placeholder="Wann startet der Vorgang?"
+          placeholder=""
           mode="date"
           value={fields.startdatum ?? null}
           onChange={v => setFields(f => ({ ...f, startdatum: v ?? undefined }))}
@@ -446,7 +446,7 @@ export function VorgaengeDialog({ open, onClose, onSubmit, defaultValues, record
         <Label htmlFor="enddatum">{fieldLabel('vorgaenge', 'enddatum')}</Label>
         <DatePicker
           id="enddatum"
-          placeholder="Wann endet der Vorgang?"
+          placeholder=""
           mode="date"
           value={fields.enddatum ?? null}
           onChange={v => setFields(f => ({ ...f, enddatum: v ?? undefined }))}
@@ -458,7 +458,7 @@ export function VorgaengeDialog({ open, onClose, onSubmit, defaultValues, record
         <Label htmlFor="werkzeuge">{fieldLabel('vorgaenge', 'werkzeuge')}</Label>
         <Textarea
           id="werkzeuge"
-          placeholder="Ein Werkzeug pro Zeile"
+          placeholder=""
           value={fields.werkzeuge ?? ''}
           onChange={e => setFields(f => ({ ...f, werkzeuge: e.target.value }))}
           rows={3}
@@ -470,7 +470,7 @@ export function VorgaengeDialog({ open, onClose, onSubmit, defaultValues, record
         <Label htmlFor="uebergabehinweise">{fieldLabel('vorgaenge', 'uebergabehinweise')}</Label>
         <Textarea
           id="uebergabehinweise"
-          placeholder="Was muss die Nachfolge wissen?"
+          placeholder=""
           value={fields.uebergabehinweise ?? ''}
           onChange={e => setFields(f => ({ ...f, uebergabehinweise: e.target.value }))}
           rows={3}

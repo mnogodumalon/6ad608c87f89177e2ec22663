@@ -280,7 +280,7 @@ export function AnforderungenUndRandbedingungenDialog({ open, onClose, onSubmit,
         }
       }
       const photoContext = contextParts.length ? contextParts.join('\n') : undefined;
-      const schema = `{\n  "vorgang": string | null, // Display name from Vorgänge (see <available-records>)\n  "art": LookupValue | null, // Art (select one key: "anforderung" | "randbedingung") mapping: anforderung=Ursprüngliche Anforderung, randbedingung=Tatsächliche Randbedingung\n  "titel": string | null, // Titel\n  "beschreibung": string | null, // Beschreibung\n  "quelle": string | null, // Quelle\n  "prioritaet": LookupValue | null, // Priorität (select one key: "hoch" | "mittel" | "niedrig") mapping: hoch=Hoch, mittel=Mittel, niedrig=Niedrig\n  "verlaesslichkeit": LookupValue | null, // Verlässlichkeit (select one key: "gesichert" | "wahrscheinlich" | "vermutet") mapping: gesichert=Gesichert, wahrscheinlich=Wahrscheinlich, vermutet=Vermutet\n  "erfassungsdatum": string | null, // YYYY-MM-DD\n}`;
+      const schema = `{\n  "vorgang": string | null, // Display name from Vorgänge (see <available-records>)\n  "art": LookupValue | null, // Art (select one key: "randbedingung" | "anforderung") mapping: randbedingung=Tatsächliche Randbedingung, anforderung=Ursprüngliche Anforderung\n  "titel": string | null, // Titel\n  "beschreibung": string | null, // Beschreibung\n  "quelle": string | null, // Quelle\n  "prioritaet": LookupValue | null, // Priorität (select one key: "hoch" | "mittel" | "niedrig") mapping: hoch=Hoch, mittel=Mittel, niedrig=Niedrig\n  "verlaesslichkeit": LookupValue | null, // Verlässlichkeit (select one key: "gesichert" | "wahrscheinlich" | "vermutet") mapping: gesichert=Gesichert, wahrscheinlich=Wahrscheinlich, vermutet=Vermutet\n  "erfassungsdatum": string | null, // YYYY-MM-DD\n}`;
       const raw = await extractFromInput<Record<string, unknown>>(schema, {
         dataUri: uri,
         userText: aiText.trim() || undefined,
@@ -354,7 +354,7 @@ export function AnforderungenUndRandbedingungenDialog({ open, onClose, onSubmit,
         <Label htmlFor="vorgang">{fieldLabel('anforderungen_und_randbedingungen', 'vorgang')} <span className="text-destructive" aria-hidden="true">*</span></Label>
         <Combobox
           id="vorgang"
-          placeholder="Welcher Vorgang?"
+          placeholder=""
           items={vorgaengeListAll.map(r => ({
             id: r.record_id,
             label: String(r.fields.titel ?? r.record_id),
@@ -376,19 +376,6 @@ export function AnforderungenUndRandbedingungenDialog({ open, onClose, onSubmit,
           <button
             type="button"
             role="radio"
-            aria-checked={lookupKey(fields.art) === 'anforderung'}
-            onClick={() => setFields(f => ({ ...f, art: (lookupKey(f.art) === 'anforderung' ? undefined : 'anforderung') as any }))}
-            className={`inline-flex items-center justify-center min-h-9 max-sm:min-h-11 max-sm:px-4 rounded-full border px-3 py-1.5 text-sm font-medium transition-colors ${
-              lookupKey(fields.art) === 'anforderung'
-                ? 'bg-foreground text-background border-foreground'
-                : 'bg-background text-foreground border-input hover:bg-accent'
-            }`}
-          >
-            {lookupLabel('anforderungen_und_randbedingungen', 'art', 'anforderung') ?? 'Ursprüngliche Anforderung'}
-          </button>
-          <button
-            type="button"
-            role="radio"
             aria-checked={lookupKey(fields.art) === 'randbedingung'}
             onClick={() => setFields(f => ({ ...f, art: (lookupKey(f.art) === 'randbedingung' ? undefined : 'randbedingung') as any }))}
             className={`inline-flex items-center justify-center min-h-9 max-sm:min-h-11 max-sm:px-4 rounded-full border px-3 py-1.5 text-sm font-medium transition-colors ${
@@ -398,6 +385,19 @@ export function AnforderungenUndRandbedingungenDialog({ open, onClose, onSubmit,
             }`}
           >
             {lookupLabel('anforderungen_und_randbedingungen', 'art', 'randbedingung') ?? 'Tatsächliche Randbedingung'}
+          </button>
+          <button
+            type="button"
+            role="radio"
+            aria-checked={lookupKey(fields.art) === 'anforderung'}
+            onClick={() => setFields(f => ({ ...f, art: (lookupKey(f.art) === 'anforderung' ? undefined : 'anforderung') as any }))}
+            className={`inline-flex items-center justify-center min-h-9 max-sm:min-h-11 max-sm:px-4 rounded-full border px-3 py-1.5 text-sm font-medium transition-colors ${
+              lookupKey(fields.art) === 'anforderung'
+                ? 'bg-foreground text-background border-foreground'
+                : 'bg-background text-foreground border-input hover:bg-accent'
+            }`}
+          >
+            {lookupLabel('anforderungen_und_randbedingungen', 'art', 'anforderung') ?? 'Ursprüngliche Anforderung'}
           </button>
         </div>
         {showErrors && !fields.art && (
@@ -410,7 +410,7 @@ export function AnforderungenUndRandbedingungenDialog({ open, onClose, onSubmit,
         <Label htmlFor="titel">{fieldLabel('anforderungen_und_randbedingungen', 'titel')} <span className="text-destructive" aria-hidden="true">*</span></Label>
         <Input
           id="titel"
-          placeholder="z. B. Zugang für Rollstuhl"
+          placeholder=""
           value={fields.titel ?? ''}
           onChange={e => setFields(f => ({ ...f, titel: e.target.value }))}
           required
@@ -425,7 +425,7 @@ export function AnforderungenUndRandbedingungenDialog({ open, onClose, onSubmit,
         <Label htmlFor="beschreibung">{fieldLabel('anforderungen_und_randbedingungen', 'beschreibung')}</Label>
         <Textarea
           id="beschreibung"
-          placeholder="Was genau wurde gefordert?"
+          placeholder=""
           value={fields.beschreibung ?? ''}
           onChange={e => setFields(f => ({ ...f, beschreibung: e.target.value }))}
           rows={3}
@@ -437,7 +437,7 @@ export function AnforderungenUndRandbedingungenDialog({ open, onClose, onSubmit,
         <Label htmlFor="quelle">{fieldLabel('anforderungen_und_randbedingungen', 'quelle')}</Label>
         <Input
           id="quelle"
-          placeholder="z. B. Kundengespräch am 12.03."
+          placeholder=""
           value={fields.quelle ?? ''}
           onChange={e => setFields(f => ({ ...f, quelle: e.target.value }))}
         />
@@ -543,7 +543,7 @@ export function AnforderungenUndRandbedingungenDialog({ open, onClose, onSubmit,
         <Label htmlFor="erfassungsdatum">{fieldLabel('anforderungen_und_randbedingungen', 'erfassungsdatum')}</Label>
         <DatePicker
           id="erfassungsdatum"
-          placeholder="Wann wurde es erfasst?"
+          placeholder=""
           mode="date"
           value={fields.erfassungsdatum ?? null}
           onChange={v => setFields(f => ({ ...f, erfassungsdatum: v ?? undefined }))}

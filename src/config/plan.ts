@@ -21,7 +21,7 @@ export const PLAN_SENTENCES: Record<string, string[]> = {
   ],
   "entscheidung-dokumentieren": [
     "Legt an: entscheidungen_und_loesungswege",
-    "Automatisch: entscheidungsdatum (heutiges Datum, automatisch), gueltigkeit (fester Wert „gueltig“)"
+    "Automatisch: gueltigkeit (fester Wert „gueltig“), entscheidungsdatum (heutiges Datum, automatisch)"
   ],
   "ergebnis-festhalten": [
     "Legt an: ergebnisse_und_grenzen",

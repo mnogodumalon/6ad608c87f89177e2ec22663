@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "changes": [
+    {
+      "kind": "field_added",
+      "entity": "annahmen",
+      "field": "upload",
+      "fulltype": "file",
+      "label": "Upload"
+    }
+  ],
+  "counts": {
+    "field_added": 1
+  },
+  "harmless_only": false
+}

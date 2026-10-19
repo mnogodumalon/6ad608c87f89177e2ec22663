@@ -303,7 +303,7 @@ export function ErgebnisseUndGrenzenDialog({ open, onClose, onSubmit, defaultVal
         }
       }
       const photoContext = contextParts.length ? contextParts.join('\n') : undefined;
-      const schema = `{\n  "vorgang": string | null, // Display name from Vorgänge (see <available-records>)\n  "entscheidung": string | null, // Display name from Entscheidungen und Lösungswege (see <available-records>)\n  "art": LookupValue | null, // Art (select one key: "ergebnis" | "grenze") mapping: ergebnis=Beobachtetes Ergebnis, grenze=Erkannte Grenze\n  "titel": string | null, // Titel\n  "beschreibung": string | null, // Beschreibung\n  "beobachtungsdatum": string | null, // YYYY-MM-DD\n  "bewertung": LookupValue | null, // Bewertung (select one key: "erfolgreich" | "teilweise" | "nicht_erfolgreich") mapping: erfolgreich=Erfolgreich, teilweise=Teilweise erfolgreich, nicht_erfolgreich=Nicht erfolgreich\n  "verlaesslichkeit": LookupValue | null, // Verlässlichkeit (select one key: "gesichert" | "wahrscheinlich" | "vermutet") mapping: gesichert=Gesichert, wahrscheinlich=Wahrscheinlich, vermutet=Vermutet\n  "auswirkung": string | null, // Auswirkung\n}`;
+      const schema = `{\n  "vorgang": string | null, // Display name from Vorgänge (see <available-records>)\n  "entscheidung": string | null, // Display name from Entscheidungen und Lösungswege (see <available-records>)\n  "art": LookupValue | null, // Art (select one key: "grenze" | "ergebnis") mapping: grenze=Erkannte Grenze, ergebnis=Beobachtetes Ergebnis\n  "titel": string | null, // Titel\n  "beschreibung": string | null, // Beschreibung\n  "beobachtungsdatum": string | null, // YYYY-MM-DD\n  "bewertung": LookupValue | null, // Bewertung (select one key: "erfolgreich" | "teilweise" | "nicht_erfolgreich") mapping: erfolgreich=Erfolgreich, teilweise=Teilweise erfolgreich, nicht_erfolgreich=Nicht erfolgreich\n  "verlaesslichkeit": LookupValue | null, // Verlässlichkeit (select one key: "gesichert" | "wahrscheinlich" | "vermutet") mapping: gesichert=Gesichert, wahrscheinlich=Wahrscheinlich, vermutet=Vermutet\n  "auswirkung": string | null, // Auswirkung\n}`;
       const raw = await extractFromInput<Record<string, unknown>>(schema, {
         dataUri: uri,
         userText: aiText.trim() || undefined,
@@ -382,7 +382,7 @@ export function ErgebnisseUndGrenzenDialog({ open, onClose, onSubmit, defaultVal
         <Label htmlFor="vorgang">{fieldLabel('ergebnisse_und_grenzen', 'vorgang')} <span className="text-destructive" aria-hidden="true">*</span></Label>
         <Combobox
           id="vorgang"
-          placeholder="Welcher Vorgang?"
+          placeholder=""
           items={vorgaengeListAll.map(r => ({
             id: r.record_id,
             label: String(r.fields.titel ?? r.record_id),
@@ -402,7 +402,7 @@ export function ErgebnisseUndGrenzenDialog({ open, onClose, onSubmit, defaultVal
         <Label htmlFor="entscheidung">{fieldLabel('ergebnisse_und_grenzen', 'entscheidung')}</Label>
         <Combobox
           id="entscheidung"
-          placeholder="Welche Entscheidung?"
+          placeholder=""
           items={entscheidungenUndLoesungswegeListAll.map(r => ({
             id: r.record_id,
             label: String(r.fields.titel ?? r.record_id),
@@ -421,19 +421,6 @@ export function ErgebnisseUndGrenzenDialog({ open, onClose, onSubmit, defaultVal
           <button
             type="button"
             role="radio"
-            aria-checked={lookupKey(fields.art) === 'ergebnis'}
-            onClick={() => setFields(f => ({ ...f, art: (lookupKey(f.art) === 'ergebnis' ? undefined : 'ergebnis') as any }))}
-            className={`inline-flex items-center justify-center min-h-9 max-sm:min-h-11 max-sm:px-4 rounded-full border px-3 py-1.5 text-sm font-medium transition-colors ${
-              lookupKey(fields.art) === 'ergebnis'
-                ? 'bg-foreground text-background border-foreground'
-                : 'bg-background text-foreground border-input hover:bg-accent'
-            }`}
-          >
-            {lookupLabel('ergebnisse_und_grenzen', 'art', 'ergebnis') ?? 'Beobachtetes Ergebnis'}
-          </button>
-          <button
-            type="button"
-            role="radio"
             aria-checked={lookupKey(fields.art) === 'grenze'}
             onClick={() => setFields(f => ({ ...f, art: (lookupKey(f.art) === 'grenze' ? undefined : 'grenze') as any }))}
             className={`inline-flex items-center justify-center min-h-9 max-sm:min-h-11 max-sm:px-4 rounded-full border px-3 py-1.5 text-sm font-medium transition-colors ${
@@ -443,6 +430,19 @@ export function ErgebnisseUndGrenzenDialog({ open, onClose, onSubmit, defaultVal
             }`}
           >
             {lookupLabel('ergebnisse_und_grenzen', 'art', 'grenze') ?? 'Erkannte Grenze'}
+          </button>
+          <button
+            type="button"
+            role="radio"
+            aria-checked={lookupKey(fields.art) === 'ergebnis'}
+            onClick={() => setFields(f => ({ ...f, art: (lookupKey(f.art) === 'ergebnis' ? undefined : 'ergebnis') as any }))}
+            className={`inline-flex items-center justify-center min-h-9 max-sm:min-h-11 max-sm:px-4 rounded-full border px-3 py-1.5 text-sm font-medium transition-colors ${
+              lookupKey(fields.art) === 'ergebnis'
+                ? 'bg-foreground text-background border-foreground'
+                : 'bg-background text-foreground border-input hover:bg-accent'
+            }`}
+          >
+            {lookupLabel('ergebnisse_und_grenzen', 'art', 'ergebnis') ?? 'Beobachtetes Ergebnis'}
           </button>
         </div>
         {showErrors && !fields.art && (
@@ -455,7 +455,7 @@ export function ErgebnisseUndGrenzenDialog({ open, onClose, onSubmit, defaultVal
         <Label htmlFor="titel">{fieldLabel('ergebnisse_und_grenzen', 'titel')} <span className="text-destructive" aria-hidden="true">*</span></Label>
         <Input
           id="titel"
-          placeholder="z. B. Lieferzeit halbiert"
+          placeholder=""
           value={fields.titel ?? ''}
           onChange={e => setFields(f => ({ ...f, titel: e.target.value }))}
           required
@@ -470,7 +470,7 @@ export function ErgebnisseUndGrenzenDialog({ open, onClose, onSubmit, defaultVal
         <Label htmlFor="beschreibung">{fieldLabel('ergebnisse_und_grenzen', 'beschreibung')}</Label>
         <Textarea
           id="beschreibung"
-          placeholder="Was wurde beobachtet?"
+          placeholder=""
           value={fields.beschreibung ?? ''}
           onChange={e => setFields(f => ({ ...f, beschreibung: e.target.value }))}
           rows={3}
@@ -482,7 +482,7 @@ export function ErgebnisseUndGrenzenDialog({ open, onClose, onSubmit, defaultVal
         <Label htmlFor="beobachtungsdatum">{fieldLabel('ergebnisse_und_grenzen', 'beobachtungsdatum')}</Label>
         <DatePicker
           id="beobachtungsdatum"
-          placeholder="Wann wurde es beobachtet?"
+          placeholder=""
           mode="date"
           value={fields.beobachtungsdatum ?? null}
           onChange={v => setFields(f => ({ ...f, beobachtungsdatum: v ?? undefined }))}
@@ -589,7 +589,7 @@ export function ErgebnisseUndGrenzenDialog({ open, onClose, onSubmit, defaultVal
         <Label htmlFor="auswirkung">{fieldLabel('ergebnisse_und_grenzen', 'auswirkung')}</Label>
         <Textarea
           id="auswirkung"
-          placeholder="Welche Folgen hatte es?"
+          placeholder=""
           value={fields.auswirkung ?? ''}
           onChange={e => setFields(f => ({ ...f, auswirkung: e.target.value }))}
           rows={3}

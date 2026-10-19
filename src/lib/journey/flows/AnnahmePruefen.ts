@@ -1,7 +1,7 @@
 /**
  * useAnnahmePruefenFlow — the plumbing of the flow « Annahme prüfen », generated from the plan.
  *
- * Changes `annahmen`: the record to change is picked (`flow.pick('annahmen')`), the form is prefilled with its values; asks `pruefstatus`, `pruefergebnis`, `stuetzendes_ergebnis`, `verlaesslichkeit`; sets `pruefdatum` itself.
+ * Changes `annahmen`: the record to change is picked (`flow.pick('annahmen')`), the form is prefilled with its values; asks `pruefstatus`, `pruefergebnis`, `verlaesslichkeit`, `stuetzendes_ergebnis`; sets `pruefdatum` itself.
  * The hook OWNS: the form(s) with exactly these fields and the plan's required
  * ingredients, one record search per picked field (columns and filter from
  * the plan), and the submit plan with its fixed and derived values. A page
@@ -94,10 +94,10 @@ export function useAnnahmePruefenFlow(options: AnnahmePruefenFlowOptions = {}) {
   const steps = { ...DEFAULT_STEPS, ...(options.steps ?? {}) } as Record<string, number>;
   const [annahmenTargetId, setAnnahmenTargetId] = useState<string | null>(null);
   const annahmen = useStepForm('annahmen', {
-    fields: ["pruefstatus", "pruefergebnis", "stuetzendes_ergebnis", "verlaesslichkeit"],
-    steps: only(steps, ["pruefstatus", "pruefergebnis", "stuetzendes_ergebnis", "verlaesslichkeit"]) as Record<string, number>,
-    initial: only(options.initial as FormValues | undefined, ["pruefstatus", "pruefergebnis", "stuetzendes_ergebnis", "verlaesslichkeit"]),
-    messages: only(options.messages as Record<string, string> | undefined, ["pruefstatus", "pruefergebnis", "stuetzendes_ergebnis", "verlaesslichkeit"]),
+    fields: ["pruefstatus", "pruefergebnis", "verlaesslichkeit", "stuetzendes_ergebnis"],
+    steps: only(steps, ["pruefstatus", "pruefergebnis", "verlaesslichkeit", "stuetzendes_ergebnis"]) as Record<string, number>,
+    initial: only(options.initial as FormValues | undefined, ["pruefstatus", "pruefergebnis", "verlaesslichkeit", "stuetzendes_ergebnis"]),
+    messages: only(options.messages as Record<string, string> | undefined, ["pruefstatus", "pruefergebnis", "verlaesslichkeit", "stuetzendes_ergebnis"]),
   });
   const forms: AnnahmePruefenForms = { annahmen };
   const formList: StepForm[] = [annahmen];
@@ -155,7 +155,7 @@ export function useAnnahmePruefenFlow(options: AnnahmePruefenFlowOptions = {}) {
       onSelect: (id: string) => {
         setAnnahmenTargetId(id);
         const rec = picks.annahmen.recordOf(id);
-        if (rec) annahmen.reset({ pruefstatus: fieldLookup(rec, "pruefstatus")?.key, pruefergebnis: fieldText(rec, "pruefergebnis"), stuetzendes_ergebnis: fieldRef(rec, "stuetzendes_ergebnis"), verlaesslichkeit: fieldLookup(rec, "verlaesslichkeit")?.key, });
+        if (rec) annahmen.reset({ pruefstatus: fieldLookup(rec, "pruefstatus")?.key, pruefergebnis: fieldText(rec, "pruefergebnis"), verlaesslichkeit: fieldLookup(rec, "verlaesslichkeit")?.key, stuetzendes_ergebnis: fieldRef(rec, "stuetzendes_ergebnis"), });
       },
       get record(): JourneyRecord | undefined { return annahmenTargetId ? picks.annahmen.recordOf(annahmenTargetId) : undefined; },
     },

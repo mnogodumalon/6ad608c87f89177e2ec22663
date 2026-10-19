@@ -5,6 +5,7 @@ import {
   RecordSection, RecordField, RecordRelation, RecordAttachments,
 } from '@/components/widgets/RecordView';
 import { t, appLabel, fieldLabel } from '@/i18n';
+import { MediaThumbnail } from '@/components/widgets/MediaViewer';
 import { SatelliteSection } from '@/components/SatelliteSection';
 import { usePermissions } from '@/lib/permissions';
 
@@ -50,6 +51,11 @@ export function AnnahmenDetails({
         <RecordField label={fieldLabel('annahmen', 'pruefstatus')} value={record.fields.pruefstatus} format="pill" />
         <RecordField label={fieldLabel('annahmen', 'pruefdatum')} value={record.fields.pruefdatum} format="date" />
         <RecordField label={fieldLabel('annahmen', 'pruefergebnis')} value={record.fields.pruefergebnis} format="longtext" className="md:col-span-2" />
+        <RecordField label={fieldLabel('annahmen', 'upload')} className="md:col-span-2">
+          {record.fields.upload ? (
+            <MediaThumbnail src={record.fields.upload as string} fit="contain" className="max-h-64 w-full rounded-lg" />
+          ) : '—'}
+        </RecordField>
       </RecordSection>
 
       {/* N:1 — verknüpfte Records: IMMER klickbar, nie eine Text-Sackgasse. */}

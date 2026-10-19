@@ -45,7 +45,7 @@
  *   anforderungen_und_randbedingungen: vorgang, art, titel, beschreibung, quelle, prioritaet, verlaesslichkeit, erfassungsdatum  ·  → vorgaenge · ← entscheidungen_und_loesungswege (list + contextual +)
  *   entscheidungen_und_loesungswege: vorgang, anforderung, titel, entscheidungsdatum, entscheider_vorname, entscheider_nachname, begruendung, alternativen, …  ·  → vorgaenge · → anforderungen_und_randbedingungen · ← ergebnisse_und_grenzen (list + contextual +) · ← regeln (list + contextual +)
  *   ergebnisse_und_grenzen: vorgang, entscheidung, art, titel, beschreibung, beobachtungsdatum, bewertung, verlaesslichkeit, …  ·  → vorgaenge · → entscheidungen_und_loesungswege · ← annahmen (list + contextual +) · ← regeln (list + contextual +)
- *   annahmen: vorgang, aussage, begruendung, verlaesslichkeit, pruefstatus, pruefdatum, pruefergebnis, stuetzendes_ergebnis  ·  → vorgaenge · → ergebnisse_und_grenzen · ← regeln (list + contextual +)
+ *   annahmen: vorgang, aussage, begruendung, verlaesslichkeit, pruefstatus, pruefdatum, pruefergebnis, stuetzendes_ergebnis, …  ·  → vorgaenge · → ergebnisse_und_grenzen · ← regeln (list + contextual +)
  *   regeln: titel, regeltext, geltungsbereich, vorgang, entscheidung, ergebnis, annahme, verlaesslichkeitsgrad, …  ·  → vorgaenge · → entscheidungen_und_loesungswege · → ergebnisse_und_grenzen · → annahmen
  */
 import { useState, useMemo, type ReactNode } from 'react';

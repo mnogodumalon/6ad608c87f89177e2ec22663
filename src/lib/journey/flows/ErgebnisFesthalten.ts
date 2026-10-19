@@ -1,7 +1,7 @@
 /**
  * useErgebnisFesthaltenFlow — the plumbing of the flow « Ergebnis oder Grenze festhalten », generated from the plan.
  *
- * Writes `ergebnisse_und_grenzen`: asks `vorgang`, `entscheidung`, `art`, `titel`, `beschreibung`, `bewertung`, `verlaesslichkeit`, `auswirkung`; sets `beobachtungsdatum` itself.
+ * Writes `ergebnisse_und_grenzen`: asks `art`, `titel`, `vorgang`, `bewertung`, `auswirkung`, `beschreibung`, `entscheidung`, `verlaesslichkeit`; sets `beobachtungsdatum` itself.
  * The hook OWNS: the form(s) with exactly these fields and the plan's required
  * ingredients, one record search per picked field (columns and filter from
  * the plan), and the submit plan with its fixed and derived values. A page
@@ -16,7 +16,7 @@
  *   messages  the sentence for an empty required field, per field
  *
  *   const flow = useErgebnisFesthaltenFlow({
- *     steps: { vorgang: 1, entscheidung: 2, art: 3, titel: 3, beschreibung: 3, bewertung: 3, verlaesslichkeit: 3, auswirkung: 3 },
+ *     steps: { vorgang: 1, entscheidung: 2, art: 3, titel: 3, bewertung: 3, auswirkung: 3, beschreibung: 3, verlaesslichkeit: 3 },
  *     items: { vorgang: r => ({ id: r.id, title: fieldText(r, 'titel') }) },
  *   });
  *   <IntentWizardShell forms={flow.forms} draftKey={flow.draftKey} …>
@@ -24,10 +24,10 @@
  *     <EntitySelectStep {...flow.picks.entscheidung.select} {...flow.pick('entscheidung')} />
  *     <Bound form={flow.forms.ergebnisse_und_grenzen} name="art" />
  *     <Bound form={flow.forms.ergebnisse_und_grenzen} name="titel" />
- *     <Bound form={flow.forms.ergebnisse_und_grenzen} name="beschreibung" />
  *     <Bound form={flow.forms.ergebnisse_und_grenzen} name="bewertung" />
- *     <Bound form={flow.forms.ergebnisse_und_grenzen} name="verlaesslichkeit" />
  *     <Bound form={flow.forms.ergebnisse_und_grenzen} name="auswirkung" />
+ *     <Bound form={flow.forms.ergebnisse_und_grenzen} name="beschreibung" />
+ *     <Bound form={flow.forms.ergebnisse_und_grenzen} name="verlaesslichkeit" />
  *     <StepNav onNext={() => flow.validateStep(n)} />
  *     {!flow.submit.done && <SummaryStep forms={flow.formList} submit={flow.submit} />}
  *     {flow.submit.result && <SuccessStep result={flow.submit.result} forms={flow.formList} submit={flow.submit} />}
@@ -94,10 +94,10 @@ function hasValues(form: StepForm): boolean {
 export function useErgebnisFesthaltenFlow(options: ErgebnisFesthaltenFlowOptions = {}) {
   const steps = { ...DEFAULT_STEPS, ...(options.steps ?? {}) } as Record<string, number>;
   const ergebnisse_und_grenzen = useStepForm('ergebnisse_und_grenzen', {
-    fields: ["vorgang", "entscheidung", "art", "titel", "beschreibung", "bewertung", "verlaesslichkeit", "auswirkung"],
-    steps: only(steps, ["vorgang", "entscheidung", "art", "titel", "beschreibung", "bewertung", "verlaesslichkeit", "auswirkung"]) as Record<string, number>,
-    initial: only(options.initial as FormValues | undefined, ["vorgang", "entscheidung", "art", "titel", "beschreibung", "bewertung", "verlaesslichkeit", "auswirkung"]),
-    messages: only(options.messages as Record<string, string> | undefined, ["vorgang", "entscheidung", "art", "titel", "beschreibung", "bewertung", "verlaesslichkeit", "auswirkung"]),
+    fields: ["art", "titel", "vorgang", "bewertung", "auswirkung", "beschreibung", "entscheidung", "verlaesslichkeit"],
+    steps: only(steps, ["art", "titel", "vorgang", "bewertung", "auswirkung", "beschreibung", "entscheidung", "verlaesslichkeit"]) as Record<string, number>,
+    initial: only(options.initial as FormValues | undefined, ["art", "titel", "vorgang", "bewertung", "auswirkung", "beschreibung", "entscheidung", "verlaesslichkeit"]),
+    messages: only(options.messages as Record<string, string> | undefined, ["art", "titel", "vorgang", "bewertung", "auswirkung", "beschreibung", "entscheidung", "verlaesslichkeit"]),
   });
   const forms: ErgebnisFesthaltenForms = { ergebnisse_und_grenzen };
   const formList: StepForm[] = [ergebnisse_und_grenzen];

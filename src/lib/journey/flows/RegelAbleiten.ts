@@ -1,7 +1,7 @@
 /**
  * useRegelAbleitenFlow — the plumbing of the flow « Regel ableiten », generated from the plan.
  *
- * Writes `regeln`: asks `titel`, `regeltext`, `geltungsbereich`, `vorgang`, `entscheidung`, `ergebnis`, `annahme`, `verlaesslichkeitsgrad`, `naechste_pruefung`, `ki_hinweis`; sets `status` itself.
+ * Writes `regeln`: asks `titel`, `annahme`, `vorgang`, `ergebnis`, `regeltext`, `ki_hinweis`, `entscheidung`, `geltungsbereich`, `naechste_pruefung`, `verlaesslichkeitsgrad`; sets `status` itself.
  * The hook OWNS: the form(s) with exactly these fields and the plan's required
  * ingredients, one record search per picked field (columns and filter from
  * the plan), and the submit plan with its fixed and derived values. A page
@@ -16,20 +16,20 @@
  *   messages  the sentence for an empty required field, per field
  *
  *   const flow = useRegelAbleitenFlow({
- *     steps: { vorgang: 1, entscheidung: 2, ergebnis: 3, annahme: 4, titel: 5, regeltext: 5, geltungsbereich: 5, verlaesslichkeitsgrad: 5, naechste_pruefung: 5, ki_hinweis: 5 },
- *     items: { vorgang: r => ({ id: r.id, title: fieldText(r, 'titel') }) },
+ *     steps: { annahme: 1, vorgang: 2, ergebnis: 3, entscheidung: 4, titel: 5, regeltext: 5, ki_hinweis: 5, geltungsbereich: 5, naechste_pruefung: 5, verlaesslichkeitsgrad: 5 },
+ *     items: { annahme: r => ({ id: r.id, title: fieldText(r, 'aussage') }) },
  *   });
  *   <IntentWizardShell forms={flow.forms} draftKey={flow.draftKey} …>
- *     <EntitySelectStep {...flow.picks.vorgang.select} {...flow.pick('vorgang')} />
- *     <EntitySelectStep {...flow.picks.entscheidung.select} {...flow.pick('entscheidung')} />
- *     <EntitySelectStep {...flow.picks.ergebnis.select} {...flow.pick('ergebnis')} />
  *     <EntitySelectStep {...flow.picks.annahme.select} {...flow.pick('annahme')} />
+ *     <EntitySelectStep {...flow.picks.vorgang.select} {...flow.pick('vorgang')} />
+ *     <EntitySelectStep {...flow.picks.ergebnis.select} {...flow.pick('ergebnis')} />
+ *     <EntitySelectStep {...flow.picks.entscheidung.select} {...flow.pick('entscheidung')} />
  *     <Bound form={flow.forms.regeln} name="titel" />
  *     <Bound form={flow.forms.regeln} name="regeltext" />
- *     <Bound form={flow.forms.regeln} name="geltungsbereich" />
- *     <Bound form={flow.forms.regeln} name="verlaesslichkeitsgrad" />
- *     <Bound form={flow.forms.regeln} name="naechste_pruefung" />
  *     <Bound form={flow.forms.regeln} name="ki_hinweis" />
+ *     <Bound form={flow.forms.regeln} name="geltungsbereich" />
+ *     <Bound form={flow.forms.regeln} name="naechste_pruefung" />
+ *     <Bound form={flow.forms.regeln} name="verlaesslichkeitsgrad" />
  *     <StepNav onNext={() => flow.validateStep(n)} />
  *     {!flow.submit.done && <SummaryStep forms={flow.formList} submit={flow.submit} />}
  *     {flow.submit.result && <SuccessStep result={flow.submit.result} forms={flow.formList} submit={flow.submit} />}
@@ -59,14 +59,14 @@ export interface RegelAbleitenFlowOptions {
   messages?: Partial<Record<Key, string>>;
   /** How a search hit reads — the card's title/subtitle/status per pick. */
   items?: {
-    vorgang?: (record: JourneyRecord, ctx: RefContext) => SelectItemLike;
-    entscheidung?: (record: JourneyRecord, ctx: RefContext) => SelectItemLike;
-    ergebnis?: (record: JourneyRecord, ctx: RefContext) => SelectItemLike;
     annahme?: (record: JourneyRecord, ctx: RefContext) => SelectItemLike;
+    vorgang?: (record: JourneyRecord, ctx: RefContext) => SelectItemLike;
+    ergebnis?: (record: JourneyRecord, ctx: RefContext) => SelectItemLike;
+    entscheidung?: (record: JourneyRecord, ctx: RefContext) => SelectItemLike;
   };
 }
 
-const DEFAULT_STEPS: Record<string, number> = {"annahme": 4, "entscheidung": 2, "ergebnis": 3, "geltungsbereich": 5, "ki_hinweis": 5, "naechste_pruefung": 5, "regeltext": 5, "titel": 5, "verlaesslichkeitsgrad": 5, "vorgang": 1};
+const DEFAULT_STEPS: Record<string, number> = {"annahme": 1, "entscheidung": 4, "ergebnis": 3, "geltungsbereich": 5, "ki_hinweis": 5, "naechste_pruefung": 5, "regeltext": 5, "titel": 5, "verlaesslichkeitsgrad": 5, "vorgang": 2};
 export const REGELABLEITEN_REVIEW_STEP = 6;
 
 function fromPick<T>(pick: { recordOf(id: string): JourneyRecord | undefined }, form: StepForm, field: string, read: (r: JourneyRecord) => T): T | undefined {
@@ -98,10 +98,10 @@ function hasValues(form: StepForm): boolean {
 export function useRegelAbleitenFlow(options: RegelAbleitenFlowOptions = {}) {
   const steps = { ...DEFAULT_STEPS, ...(options.steps ?? {}) } as Record<string, number>;
   const regeln = useStepForm('regeln', {
-    fields: ["titel", "regeltext", "geltungsbereich", "vorgang", "entscheidung", "ergebnis", "annahme", "verlaesslichkeitsgrad", "naechste_pruefung", "ki_hinweis"],
-    steps: only(steps, ["titel", "regeltext", "geltungsbereich", "vorgang", "entscheidung", "ergebnis", "annahme", "verlaesslichkeitsgrad", "naechste_pruefung", "ki_hinweis"]) as Record<string, number>,
-    initial: only(options.initial as FormValues | undefined, ["titel", "regeltext", "geltungsbereich", "vorgang", "entscheidung", "ergebnis", "annahme", "verlaesslichkeitsgrad", "naechste_pruefung", "ki_hinweis"]),
-    messages: only(options.messages as Record<string, string> | undefined, ["titel", "regeltext", "geltungsbereich", "vorgang", "entscheidung", "ergebnis", "annahme", "verlaesslichkeitsgrad", "naechste_pruefung", "ki_hinweis"]),
+    fields: ["titel", "annahme", "vorgang", "ergebnis", "regeltext", "ki_hinweis", "entscheidung", "geltungsbereich", "naechste_pruefung", "verlaesslichkeitsgrad"],
+    steps: only(steps, ["titel", "annahme", "vorgang", "ergebnis", "regeltext", "ki_hinweis", "entscheidung", "geltungsbereich", "naechste_pruefung", "verlaesslichkeitsgrad"]) as Record<string, number>,
+    initial: only(options.initial as FormValues | undefined, ["titel", "annahme", "vorgang", "ergebnis", "regeltext", "ki_hinweis", "entscheidung", "geltungsbereich", "naechste_pruefung", "verlaesslichkeitsgrad"]),
+    messages: only(options.messages as Record<string, string> | undefined, ["titel", "annahme", "vorgang", "ergebnis", "regeltext", "ki_hinweis", "entscheidung", "geltungsbereich", "naechste_pruefung", "verlaesslichkeitsgrad"]),
   });
   const forms: RegelAbleitenForms = { regeln };
   const formList: StepForm[] = [regeln];
@@ -111,25 +111,25 @@ export function useRegelAbleitenFlow(options: RegelAbleitenFlowOptions = {}) {
   // render time, so a change works on the running application.
   usePolicyVersion();
   const searches = {
+    annahme: useRecordSearch(servicePort, 'annahmen', withPickPolicy('annahme', {
+      searchFields: ["aussage"] as never,
+      filter: "r.v_pruefstatus == 'bestaetigt'",
+      where: (r: JourneyRecord) => (fieldLookup(r, "pruefstatus")?.key ?? null) === "bestaetigt",
+      toItem: options.items?.annahme as never,
+    })),
     vorgang: useRecordSearch(servicePort, 'vorgaenge', withPickPolicy('vorgang', {
       searchFields: ["titel"] as never,
       toItem: options.items?.vorgang as never,
+    })),
+    ergebnis: useRecordSearch(servicePort, 'ergebnisse_und_grenzen', withPickPolicy('ergebnis', {
+      searchFields: ["titel"] as never,
+      toItem: options.items?.ergebnis as never,
     })),
     entscheidung: useRecordSearch(servicePort, 'entscheidungen_und_loesungswege', withPickPolicy('entscheidung', {
       searchFields: ["titel"] as never,
       filter: "r.v_gueltigkeit == 'gueltig'",
       where: (r: JourneyRecord) => (fieldLookup(r, "gueltigkeit")?.key ?? null) === "gueltig",
       toItem: options.items?.entscheidung as never,
-    })),
-    ergebnis: useRecordSearch(servicePort, 'ergebnisse_und_grenzen', withPickPolicy('ergebnis', {
-      searchFields: ["titel"] as never,
-      toItem: options.items?.ergebnis as never,
-    })),
-    annahme: useRecordSearch(servicePort, 'annahmen', withPickPolicy('annahme', {
-      searchFields: ["aussage"] as never,
-      filter: "r.v_pruefstatus == 'bestaetigt'",
-      where: (r: JourneyRecord) => (fieldLookup(r, "pruefstatus")?.key ?? null) === "bestaetigt",
-      toItem: options.items?.annahme as never,
     })),
   };
   // Whether a pick offers „Neu anlegen“ is the plan's call: off for the record
@@ -147,10 +147,10 @@ export function useRegelAbleitenFlow(options: RegelAbleitenFlowOptions = {}) {
     href: `#/verwaltung/anwendung?line=intent:regel-ableiten:write:${entity}.${field}`,
   });
   const picks = {
-    vorgang: { ...searches.vorgang, select: { ...searches.vorgang.select, create: false as boolean, hint: hintFor('vorgang', 'vorgaenge', null as PickWhere | null) } },
-    entscheidung: { ...searches.entscheidung, select: { ...searches.entscheidung.select, create: false as boolean, hint: hintFor('entscheidung', 'entscheidungen_und_loesungswege', {"conditions": [{"field": "gueltigkeit", "op": "eq", "value": "gueltig"}], "mode": "all"} as PickWhere | null) } },
-    ergebnis: { ...searches.ergebnis, select: { ...searches.ergebnis.select, create: false as boolean, hint: hintFor('ergebnis', 'ergebnisse_und_grenzen', null as PickWhere | null) } },
     annahme: { ...searches.annahme, select: { ...searches.annahme.select, create: true as boolean, hint: hintFor('annahme', 'annahmen', {"conditions": [{"field": "pruefstatus", "op": "eq", "value": "bestaetigt"}], "mode": "all"} as PickWhere | null) } },
+    vorgang: { ...searches.vorgang, select: { ...searches.vorgang.select, create: false as boolean, hint: hintFor('vorgang', 'vorgaenge', null as PickWhere | null) } },
+    ergebnis: { ...searches.ergebnis, select: { ...searches.ergebnis.select, create: false as boolean, hint: hintFor('ergebnis', 'ergebnisse_und_grenzen', null as PickWhere | null) } },
+    entscheidung: { ...searches.entscheidung, select: { ...searches.entscheidung.select, create: false as boolean, hint: hintFor('entscheidung', 'entscheidungen_und_loesungswege', {"conditions": [{"field": "gueltigkeit", "op": "eq", "value": "gueltig"}], "mode": "all"} as PickWhere | null) } },
   };
 
   const plan: PlanStep[] = [

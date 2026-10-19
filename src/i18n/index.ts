@@ -1615,10 +1615,10 @@ export const LABELS: Record<CoreLocale, LabelBundle> = {
         },
         "lookups": {
           "status": {
+            "geplant": "Geplant",
             "laufend": "Laufend",
             "abgeschlossen": "Abgeschlossen",
-            "archiviert": "Archiviert",
-            "geplant": "Geplant"
+            "archiviert": "Archiviert"
           }
         }
       },
@@ -1637,8 +1637,8 @@ export const LABELS: Record<CoreLocale, LabelBundle> = {
         },
         "lookups": {
           "art": {
-            "anforderung": "Ursprüngliche Anforderung",
-            "randbedingung": "Tatsächliche Randbedingung"
+            "randbedingung": "Tatsächliche Randbedingung",
+            "anforderung": "Ursprüngliche Anforderung"
           },
           "prioritaet": {
             "hoch": "Hoch",
@@ -1670,9 +1670,9 @@ export const LABELS: Record<CoreLocale, LabelBundle> = {
         },
         "lookups": {
           "gueltigkeit": {
+            "gueltig": "Gültig",
             "ueberholt": "Überholt",
-            "widerrufen": "Widerrufen",
-            "gueltig": "Gültig"
+            "widerrufen": "Widerrufen"
           }
         }
       },
@@ -1692,8 +1692,8 @@ export const LABELS: Record<CoreLocale, LabelBundle> = {
         },
         "lookups": {
           "art": {
-            "ergebnis": "Beobachtetes Ergebnis",
-            "grenze": "Erkannte Grenze"
+            "grenze": "Erkannte Grenze",
+            "ergebnis": "Beobachtetes Ergebnis"
           },
           "bewertung": {
             "erfolgreich": "Erfolgreich",
@@ -1718,7 +1718,8 @@ export const LABELS: Record<CoreLocale, LabelBundle> = {
           "pruefstatus": "Prüfstatus",
           "pruefdatum": "Prüfdatum",
           "pruefergebnis": "Prüfergebnis",
-          "stuetzendes_ergebnis": "Stützendes Ergebnis"
+          "stuetzendes_ergebnis": "Stützendes Ergebnis",
+          "upload": "Upload"
         },
         "lookups": {
           "verlaesslichkeit": {
@@ -1786,10 +1787,10 @@ export const LABELS: Record<CoreLocale, LabelBundle> = {
         },
         "lookups": {
           "status": {
+            "geplant": "Planned",
             "laufend": "Ongoing",
             "abgeschlossen": "Completed",
-            "archiviert": "Archived",
-            "geplant": "Planned"
+            "archiviert": "Archived"
           }
         }
       },
@@ -1804,12 +1805,12 @@ export const LABELS: Record<CoreLocale, LabelBundle> = {
           "quelle": "Source",
           "prioritaet": "Priority",
           "verlaesslichkeit": "Reliability",
-          "erfassungsdatum": "Recorded On"
+          "erfassungsdatum": "Date Recorded"
         },
         "lookups": {
           "art": {
-            "anforderung": "Original Requirement",
-            "randbedingung": "Actual Constraint"
+            "randbedingung": "Actual Constraint",
+            "anforderung": "Original Requirement"
           },
           "prioritaet": {
             "hoch": "High",
@@ -1819,7 +1820,7 @@ export const LABELS: Record<CoreLocale, LabelBundle> = {
           "verlaesslichkeit": {
             "gesichert": "Confirmed",
             "wahrscheinlich": "Probable",
-            "vermutet": "Presumed"
+            "vermutet": "Assumed"
           }
         }
       },
@@ -1841,14 +1842,14 @@ export const LABELS: Record<CoreLocale, LabelBundle> = {
         },
         "lookups": {
           "gueltigkeit": {
-            "ueberholt": "Superseded",
-            "widerrufen": "Revoked",
-            "gueltig": "Valid"
+            "gueltig": "Valid",
+            "ueberholt": "Obsolete",
+            "widerrufen": "Revoked"
           }
         }
       },
       "ergebnisse_und_grenzen": {
-        "name": "Results and Limitations",
+        "name": "Results and Limits",
         "app_id": "6ad608a856aeb3d7ca75889e",
         "fields": {
           "vorgang": "Case",
@@ -1863,8 +1864,8 @@ export const LABELS: Record<CoreLocale, LabelBundle> = {
         },
         "lookups": {
           "art": {
-            "ergebnis": "Observed Result",
-            "grenze": "Identified Limitation"
+            "grenze": "Identified Limit",
+            "ergebnis": "Observed Result"
           },
           "bewertung": {
             "erfolgreich": "Successful",
@@ -1874,7 +1875,7 @@ export const LABELS: Record<CoreLocale, LabelBundle> = {
           "verlaesslichkeit": {
             "gesichert": "Confirmed",
             "wahrscheinlich": "Probable",
-            "vermutet": "Presumed"
+            "vermutet": "Assumed"
           }
         }
       },
@@ -1889,13 +1890,14 @@ export const LABELS: Record<CoreLocale, LabelBundle> = {
           "pruefstatus": "Verification Status",
           "pruefdatum": "Verification Date",
           "pruefergebnis": "Verification Result",
-          "stuetzendes_ergebnis": "Supporting Result"
+          "stuetzendes_ergebnis": "Supporting Result",
+          "upload": "Upload"
         },
         "lookups": {
           "verlaesslichkeit": {
             "gesichert": "Confirmed",
             "wahrscheinlich": "Probable",
-            "vermutet": "Presumed"
+            "vermutet": "Assumed"
           },
           "pruefstatus": {
             "offen": "Open",

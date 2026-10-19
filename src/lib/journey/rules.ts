@@ -200,10 +200,10 @@ export const FIELD_RULES: Record<EntityKey, Record<string, FieldRule>> = {
       "label": "Status",
       "writable": true,
       "options": [
+        "geplant",
         "laufend",
         "abgeschlossen",
-        "archiviert",
-        "geplant"
+        "archiviert"
       ]
     },
     "startdatum": {
@@ -258,8 +258,8 @@ export const FIELD_RULES: Record<EntityKey, Record<string, FieldRule>> = {
       "label": "Art",
       "writable": true,
       "options": [
-        "anforderung",
-        "randbedingung"
+        "randbedingung",
+        "anforderung"
       ]
     },
     "titel": {
@@ -422,9 +422,9 @@ export const FIELD_RULES: Record<EntityKey, Record<string, FieldRule>> = {
       "label": "Gültigkeitsstatus",
       "writable": true,
       "options": [
+        "gueltig",
         "ueberholt",
-        "widerrufen",
-        "gueltig"
+        "widerrufen"
       ]
     }
   },
@@ -457,8 +457,8 @@ export const FIELD_RULES: Record<EntityKey, Record<string, FieldRule>> = {
       "label": "Art",
       "writable": true,
       "options": [
-        "ergebnis",
-        "grenze"
+        "grenze",
+        "ergebnis"
       ]
     },
     "titel": {
@@ -599,6 +599,14 @@ export const FIELD_RULES: Record<EntityKey, Record<string, FieldRule>> = {
       "writable": true,
       "targetAppId": "6ad608a856aeb3d7ca75889e",
       "targetEntity": "ergebnisse_und_grenzen"
+    },
+    "upload": {
+      "key": "upload",
+      "fulltype": "file",
+      "kind": "file",
+      "required": false,
+      "label": "Upload",
+      "writable": false
     }
   },
   "regeln": {

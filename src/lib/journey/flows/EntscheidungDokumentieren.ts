@@ -1,7 +1,7 @@
 /**
  * useEntscheidungDokumentierenFlow — the plumbing of the flow « Entscheidung dokumentieren », generated from the plan.
  *
- * Writes `entscheidungen_und_loesungswege`: asks `vorgang`, `anforderung`, `titel`, `entscheider_vorname`, `entscheider_nachname`, `begruendung`, `alternativen`, `loesungsweg`, `werkzeug`; sets `entscheidungsdatum`, `gueltigkeit` itself.
+ * Writes `entscheidungen_und_loesungswege`: asks `titel`, `vorgang`, `werkzeug`, `anforderung`, `begruendung`, `loesungsweg`, `alternativen`, `entscheider_vorname`, `entscheider_nachname`; sets `gueltigkeit`, `entscheidungsdatum` itself.
  * The hook OWNS: the form(s) with exactly these fields and the plan's required
  * ingredients, one record search per picked field (columns and filter from
  * the plan), and the submit plan with its fixed and derived values. A page
@@ -16,19 +16,19 @@
  *   messages  the sentence for an empty required field, per field
  *
  *   const flow = useEntscheidungDokumentierenFlow({
- *     steps: { vorgang: 1, anforderung: 2, titel: 3, entscheider_vorname: 3, entscheider_nachname: 3, begruendung: 3, alternativen: 3, loesungsweg: 3, werkzeug: 3 },
+ *     steps: { vorgang: 1, anforderung: 2, titel: 3, werkzeug: 3, begruendung: 3, loesungsweg: 3, alternativen: 3, entscheider_vorname: 3, entscheider_nachname: 3 },
  *     items: { vorgang: r => ({ id: r.id, title: fieldText(r, 'titel') }) },
  *   });
  *   <IntentWizardShell forms={flow.forms} draftKey={flow.draftKey} …>
  *     <EntitySelectStep {...flow.picks.vorgang.select} {...flow.pick('vorgang')} />
  *     <EntitySelectStep {...flow.picks.anforderung.select} {...flow.pick('anforderung')} />
  *     <Bound form={flow.forms.entscheidungen_und_loesungswege} name="titel" />
+ *     <Bound form={flow.forms.entscheidungen_und_loesungswege} name="werkzeug" />
+ *     <Bound form={flow.forms.entscheidungen_und_loesungswege} name="begruendung" />
+ *     <Bound form={flow.forms.entscheidungen_und_loesungswege} name="loesungsweg" />
+ *     <Bound form={flow.forms.entscheidungen_und_loesungswege} name="alternativen" />
  *     <Bound form={flow.forms.entscheidungen_und_loesungswege} name="entscheider_vorname" />
  *     <Bound form={flow.forms.entscheidungen_und_loesungswege} name="entscheider_nachname" />
- *     <Bound form={flow.forms.entscheidungen_und_loesungswege} name="begruendung" />
- *     <Bound form={flow.forms.entscheidungen_und_loesungswege} name="alternativen" />
- *     <Bound form={flow.forms.entscheidungen_und_loesungswege} name="loesungsweg" />
- *     <Bound form={flow.forms.entscheidungen_und_loesungswege} name="werkzeug" />
  *     <StepNav onNext={() => flow.validateStep(n)} />
  *     {!flow.submit.done && <SummaryStep forms={flow.formList} submit={flow.submit} />}
  *     {flow.submit.result && <SuccessStep result={flow.submit.result} forms={flow.formList} submit={flow.submit} />}
@@ -95,10 +95,10 @@ function hasValues(form: StepForm): boolean {
 export function useEntscheidungDokumentierenFlow(options: EntscheidungDokumentierenFlowOptions = {}) {
   const steps = { ...DEFAULT_STEPS, ...(options.steps ?? {}) } as Record<string, number>;
   const entscheidungen_und_loesungswege = useStepForm('entscheidungen_und_loesungswege', {
-    fields: ["vorgang", "anforderung", "titel", "entscheider_vorname", "entscheider_nachname", "begruendung", "alternativen", "loesungsweg", "werkzeug"],
-    steps: only(steps, ["vorgang", "anforderung", "titel", "entscheider_vorname", "entscheider_nachname", "begruendung", "alternativen", "loesungsweg", "werkzeug"]) as Record<string, number>,
-    initial: only(options.initial as FormValues | undefined, ["vorgang", "anforderung", "titel", "entscheider_vorname", "entscheider_nachname", "begruendung", "alternativen", "loesungsweg", "werkzeug"]),
-    messages: only(options.messages as Record<string, string> | undefined, ["vorgang", "anforderung", "titel", "entscheider_vorname", "entscheider_nachname", "begruendung", "alternativen", "loesungsweg", "werkzeug"]),
+    fields: ["titel", "vorgang", "werkzeug", "anforderung", "begruendung", "loesungsweg", "alternativen", "entscheider_vorname", "entscheider_nachname"],
+    steps: only(steps, ["titel", "vorgang", "werkzeug", "anforderung", "begruendung", "loesungsweg", "alternativen", "entscheider_vorname", "entscheider_nachname"]) as Record<string, number>,
+    initial: only(options.initial as FormValues | undefined, ["titel", "vorgang", "werkzeug", "anforderung", "begruendung", "loesungsweg", "alternativen", "entscheider_vorname", "entscheider_nachname"]),
+    messages: only(options.messages as Record<string, string> | undefined, ["titel", "vorgang", "werkzeug", "anforderung", "begruendung", "loesungsweg", "alternativen", "entscheider_vorname", "entscheider_nachname"]),
   });
   const forms: EntscheidungDokumentierenForms = { entscheidungen_und_loesungswege };
   const formList: StepForm[] = [entscheidungen_und_loesungswege];
@@ -142,8 +142,8 @@ export function useEntscheidungDokumentierenFlow(options: EntscheidungDokumentie
     {
       key: 'entscheidungen_und_loesungswege', entity: 'entscheidungen_und_loesungswege', form: entscheidungen_und_loesungswege, primary: true,
       values: (): FormValues => ({
-        entscheidungsdatum: policyFixedValue('entscheidungen_und_loesungswege', 'entscheidungsdatum') ?? todayIso(),
         gueltigkeit: policyFixedValue('entscheidungen_und_loesungswege', 'gueltigkeit') ?? "gueltig",
+        entscheidungsdatum: policyFixedValue('entscheidungen_und_loesungswege', 'entscheidungsdatum') ?? todayIso(),
       }),
 
       // the review shows what this step sets itself — changeable on „Deine Anwendung“, not here

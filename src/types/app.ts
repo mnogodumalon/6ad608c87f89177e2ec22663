@@ -142,6 +142,7 @@ export interface Annahmen {
     pruefdatum?: string; // Format: YYYY-MM-DD oder ISO String
     pruefergebnis?: string;
     stuetzendes_ergebnis?: RecordUrl; // applookup -> URL zu 'ErgebnisseUndGrenzen' Record
+    upload?: string;
   };
 }
 
@@ -183,18 +184,18 @@ export const APP_IDS = {
 
 export const LOOKUP_OPTIONS: Record<string, Record<string, {key: string, label: string}[]>> = {
   'vorgaenge': {
-    status: [{ key: "laufend", get label() { return lookupLabel('vorgaenge', 'status', "laufend") ?? "Laufend"; } }, { key: "abgeschlossen", get label() { return lookupLabel('vorgaenge', 'status', "abgeschlossen") ?? "Abgeschlossen"; } }, { key: "archiviert", get label() { return lookupLabel('vorgaenge', 'status', "archiviert") ?? "Archiviert"; } }, { key: "geplant", get label() { return lookupLabel('vorgaenge', 'status', "geplant") ?? "Geplant"; } }],
+    status: [{ key: "geplant", get label() { return lookupLabel('vorgaenge', 'status', "geplant") ?? "Geplant"; } }, { key: "laufend", get label() { return lookupLabel('vorgaenge', 'status', "laufend") ?? "Laufend"; } }, { key: "abgeschlossen", get label() { return lookupLabel('vorgaenge', 'status', "abgeschlossen") ?? "Abgeschlossen"; } }, { key: "archiviert", get label() { return lookupLabel('vorgaenge', 'status', "archiviert") ?? "Archiviert"; } }],
   },
   'anforderungen_und_randbedingungen': {
-    art: [{ key: "anforderung", get label() { return lookupLabel('anforderungen_und_randbedingungen', 'art', "anforderung") ?? "Ursprüngliche Anforderung"; } }, { key: "randbedingung", get label() { return lookupLabel('anforderungen_und_randbedingungen', 'art', "randbedingung") ?? "Tatsächliche Randbedingung"; } }],
+    art: [{ key: "randbedingung", get label() { return lookupLabel('anforderungen_und_randbedingungen', 'art', "randbedingung") ?? "Tatsächliche Randbedingung"; } }, { key: "anforderung", get label() { return lookupLabel('anforderungen_und_randbedingungen', 'art', "anforderung") ?? "Ursprüngliche Anforderung"; } }],
     prioritaet: [{ key: "hoch", get label() { return lookupLabel('anforderungen_und_randbedingungen', 'prioritaet', "hoch") ?? "Hoch"; } }, { key: "mittel", get label() { return lookupLabel('anforderungen_und_randbedingungen', 'prioritaet', "mittel") ?? "Mittel"; } }, { key: "niedrig", get label() { return lookupLabel('anforderungen_und_randbedingungen', 'prioritaet', "niedrig") ?? "Niedrig"; } }],
     verlaesslichkeit: [{ key: "gesichert", get label() { return lookupLabel('anforderungen_und_randbedingungen', 'verlaesslichkeit', "gesichert") ?? "Gesichert"; } }, { key: "wahrscheinlich", get label() { return lookupLabel('anforderungen_und_randbedingungen', 'verlaesslichkeit', "wahrscheinlich") ?? "Wahrscheinlich"; } }, { key: "vermutet", get label() { return lookupLabel('anforderungen_und_randbedingungen', 'verlaesslichkeit', "vermutet") ?? "Vermutet"; } }],
   },
   'entscheidungen_und_loesungswege': {
-    gueltigkeit: [{ key: "ueberholt", get label() { return lookupLabel('entscheidungen_und_loesungswege', 'gueltigkeit', "ueberholt") ?? "Überholt"; } }, { key: "widerrufen", get label() { return lookupLabel('entscheidungen_und_loesungswege', 'gueltigkeit', "widerrufen") ?? "Widerrufen"; } }, { key: "gueltig", get label() { return lookupLabel('entscheidungen_und_loesungswege', 'gueltigkeit', "gueltig") ?? "Gültig"; } }],
+    gueltigkeit: [{ key: "gueltig", get label() { return lookupLabel('entscheidungen_und_loesungswege', 'gueltigkeit', "gueltig") ?? "Gültig"; } }, { key: "ueberholt", get label() { return lookupLabel('entscheidungen_und_loesungswege', 'gueltigkeit', "ueberholt") ?? "Überholt"; } }, { key: "widerrufen", get label() { return lookupLabel('entscheidungen_und_loesungswege', 'gueltigkeit', "widerrufen") ?? "Widerrufen"; } }],
   },
   'ergebnisse_und_grenzen': {
-    art: [{ key: "ergebnis", get label() { return lookupLabel('ergebnisse_und_grenzen', 'art', "ergebnis") ?? "Beobachtetes Ergebnis"; } }, { key: "grenze", get label() { return lookupLabel('ergebnisse_und_grenzen', 'art', "grenze") ?? "Erkannte Grenze"; } }],
+    art: [{ key: "grenze", get label() { return lookupLabel('ergebnisse_und_grenzen', 'art', "grenze") ?? "Erkannte Grenze"; } }, { key: "ergebnis", get label() { return lookupLabel('ergebnisse_und_grenzen', 'art', "ergebnis") ?? "Beobachtetes Ergebnis"; } }],
     bewertung: [{ key: "erfolgreich", get label() { return lookupLabel('ergebnisse_und_grenzen', 'bewertung', "erfolgreich") ?? "Erfolgreich"; } }, { key: "teilweise", get label() { return lookupLabel('ergebnisse_und_grenzen', 'bewertung', "teilweise") ?? "Teilweise erfolgreich"; } }, { key: "nicht_erfolgreich", get label() { return lookupLabel('ergebnisse_und_grenzen', 'bewertung', "nicht_erfolgreich") ?? "Nicht erfolgreich"; } }],
     verlaesslichkeit: [{ key: "gesichert", get label() { return lookupLabel('ergebnisse_und_grenzen', 'verlaesslichkeit', "gesichert") ?? "Gesichert"; } }, { key: "wahrscheinlich", get label() { return lookupLabel('ergebnisse_und_grenzen', 'verlaesslichkeit', "wahrscheinlich") ?? "Wahrscheinlich"; } }, { key: "vermutet", get label() { return lookupLabel('ergebnisse_und_grenzen', 'verlaesslichkeit', "vermutet") ?? "Vermutet"; } }],
   },
@@ -272,6 +273,7 @@ export const FIELD_TYPES: Record<string, Record<string, string>> = {
     'pruefdatum': 'date/date',
     'pruefergebnis': 'string/textarea',
     'stuetzendes_ergebnis': 'applookup/select',
+    'upload': 'file',
   },
   'regeln': {
     'titel': 'string/text',
