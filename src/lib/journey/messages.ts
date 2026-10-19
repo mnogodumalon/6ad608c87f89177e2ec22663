@@ -39,6 +39,12 @@ export type MessageFieldKey<E extends EntityKey> = E extends keyof MessageFields
 
 export const REQUIRED_MESSAGES: { [E in EntityKey]?: Partial<Record<MessageFieldKey<E>, string>> } = {
   // <custom:messages>
+  vorgaenge: { titel: "Bitte einen Titel für den Vorgang eingeben.", status: "Bitte den Status des Vorgangs wählen." },
+  anforderungen_und_randbedingungen: { vorgang: "Bitte einen Vorgang auswählen.", art: "Bitte Anforderung oder Randbedingung wählen.", titel: "Bitte einen Titel eingeben.", verlaesslichkeit: "Bitte die Verlässlichkeit wählen." },
+  entscheidungen_und_loesungswege: { vorgang: "Bitte einen Vorgang auswählen.", titel: "Bitte die Entscheidung kurz benennen.", gueltigkeit: "Bitte den Gültigkeitsstatus wählen." },
+  ergebnisse_und_grenzen: { vorgang: "Bitte einen Vorgang auswählen.", art: "Bitte Ergebnis oder Grenze wählen.", titel: "Bitte einen Titel eingeben.", verlaesslichkeit: "Bitte die Verlässlichkeit wählen." },
+  annahmen: { vorgang: "Bitte einen Vorgang auswählen.", aussage: "Bitte die Annahme formulieren.", verlaesslichkeit: "Bitte die Verlässlichkeit wählen.", pruefstatus: "Bitte bestätigt, widerlegt oder offen wählen." },
+  regeln: { titel: "Bitte einen Titel für die Regel eingeben.", regeltext: "Bitte die Regel formulieren.", verlaesslichkeitsgrad: "Bitte den Verlässlichkeitsgrad wählen.", status: "Bitte den Status der Regel wählen." },
   // </custom:messages>
 };
 

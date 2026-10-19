@@ -20,6 +20,7 @@
 import type { ComponentType } from 'react';
 
 // <custom:intent-imports>
+import { IconFolderPlus, IconGavel, IconFlag, IconChecklist, IconRulerMeasure, IconArchive } from '@tabler/icons-react';
 // </custom:intent-imports>
 
 export interface IntentLink {
@@ -42,6 +43,12 @@ export interface IntentLink {
 
 export const INTENTS: IntentLink[] = [
   // <custom:intents>
+  { path: '/intents/vorgang-anlegen', label: { de: 'Vorgang anlegen', en: 'Create case' }, icon: IconFolderPlus, description: 'Neuen Vorgang mit Verantwortlichen, Zeitraum und eingesetzten Werkzeugen erfassen und direkt erste Anforderungen dazu festhalten.' },
+  { path: '/intents/entscheidung-dokumentieren', label: { de: 'Entscheidung dokumentieren', en: 'Document decision' }, icon: IconGavel, description: 'Eine Entscheidung mit Begründung, Alternativen und Lösungsweg zu einem Vorgang und ggf. einer Anforderung festhalten.' },
+  { path: '/intents/ergebnis-festhalten', label: { de: 'Ergebnis oder Grenze festhalten', en: 'Record result or limit' }, icon: IconFlag, description: 'Ein beobachtetes Ergebnis oder eine erkannte Grenze zu einer Entscheidung erfassen, mit Verlässlichkeit.' },
+  { path: '/intents/annahme-pruefen', label: { de: 'Annahme prüfen', en: 'Review assumption' }, icon: IconChecklist, description: 'Eine offene Annahme bestätigen oder widerlegen, mit Prüfergebnis und stützendem Ergebnis.' },
+  { path: '/intents/regel-ableiten', label: { de: 'Regel ableiten', en: 'Derive rule' }, icon: IconRulerMeasure, description: 'Aus einer Entscheidung, einem Ergebnis oder einer bestätigten Annahme eine Regel als Entwurf formulieren.' },
+  { path: '/intents/vorgang-abschliessen', label: { de: 'Vorgang abschließen und übergeben', en: 'Close and hand over case' }, icon: IconArchive, description: 'Einen Vorgang mit Enddatum und Übergabehinweisen abschließen, damit das Wissen bei Wechsel erhalten bleibt.' },
   // </custom:intents>
 ];
 
@@ -52,7 +59,7 @@ export const INTENTS: IntentLink[] = [
  * purpose — a scaffold update resets it to false (self-healing if Phase 2
  * never ran).
  */
-export const INTENTS_PENDING = true;
+export const INTENTS_PENDING = false;
 
 /**
  * When the Phase-1 bundle was deployed (ISO, set by the service together with
